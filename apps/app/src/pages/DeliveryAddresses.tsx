@@ -360,7 +360,7 @@ function NewAddressModal(props: {
                   }}
                   onIonChange={(e) => {
                     if (e.detail.value) {
-                      setValue("phone_number", e.detail.value);
+                      setValue("phone_number", e.detail.value+"");
                     }
                   }}
                 ></IonInput>
