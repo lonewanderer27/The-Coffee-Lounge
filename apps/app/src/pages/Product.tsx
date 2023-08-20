@@ -158,21 +158,22 @@ export default function ProductPage() {
 
   console.log(productData);
 
-  if (productData != undefined) {
-    return (
-      <IonPage>
-        <IonHeader translucent={true}>
-          <IonToolbar>
-            <IonTitle>View Product</IonTitle>
-            <IonButtons slot="start">
-              <IonBackButton></IonBackButton>
-            </IonButtons>
-            <IonButtons slot="end">
-              <CartBtn />
-            </IonButtons>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent fullscreen>
+  return (
+    <IonPage>
+      <IonHeader translucent={true}>
+        <IonToolbar>
+          <IonTitle>View Product</IonTitle>
+          <IonButtons slot="start">
+            <IonBackButton></IonBackButton>
+          </IonButtons>
+          <IonButtons slot="end">
+            <CartBtn />
+          </IonButtons>
+        </IonToolbar>
+      </IonHeader>
+      {productData != undefined && (
+        <>
+          <IonContent fullscreen>
           <div className="ion-padding bg-slate-200 dark:bg-slate-800">
             <IonRow className="ion-justify-content-center relative">
               {currentUser && (
@@ -398,7 +399,8 @@ export default function ProductPage() {
             </IonRow>
           </IonToolbar>
         </IonFooter>
-      </IonPage>
-    );
-  }
+        </>
+      )}
+    </IonPage>
+  );
 }
