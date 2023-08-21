@@ -1,0 +1,35 @@
+{
+  "name": "payment-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@chakra-ui/next-js": "^2.1.5",
+    "@chakra-ui/react": "^2.8.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@types/node": "20.4.10",
+    "@types/react": "18.2.20",
+    "@types/react-dom": "18.2.7",
+    "autoprefixer": "10.4.14",
+    "framer-motion": "^10.15.1",
+    "next": "13.4.16",
+    "postcss": "8.4.27",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hook-form": "^7.45.4",
+    "recoil": "^0.7.7",
+    "tailwindcss": "3.3.3",
+    "typescript": "5.1.6",
+    "usehooks-ts": "^2.9.1",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "daisyui": "^3.5.1"
+  }
+}

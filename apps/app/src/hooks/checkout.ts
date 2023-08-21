@@ -26,6 +26,23 @@ import { cartAtom } from "../atoms/cart";
 import { getAuth } from "firebase/auth";
 import { orderAtom } from "../atoms/order";
 
+const paymentGatewayURL = (
+  paymentOption: PaymentOptionType,
+  amountDue: number,
+  orderId: string,
+) => {
+  const baseURL = import.meta.env.VITE_PAYMENT_GATEWAY_URL;
+  const callbackUrl = `${window.location.origin}/orders/${orderId}/payment-success`;
+  switch (paymentOption) {
+    case PaymentOptionType.GCash: {
+      return `${baseURL}/gcash/login?amountDue=${amountDue}.00&merchant=The Coffee Lounge&callbackUrl=${callbackUrl}`;
+    }
+    default: {
+      return `${baseURL}/gcash/login?amountDue=${amountDue}.00&merchant=The Coffee Lounge&callbackUrl=${callbackUrl}`;
+    }
+  }
+}
+
 export const useCheckout = (totalPrice: number) => {
   const [cart, setCart] = useRecoilState(cartAtom);
   const [payOption, setPayOption] = useRecoilState(payOptionAtom);
@@ -93,8 +110,10 @@ export const useCheckout = (totalPrice: number) => {
           // dismiss loading
           await dismiss();
 
-          // redirect to processing payment page
-          router.push(`/orders/${order.id}/process-payment/`);
+          // redirect to payment gateway
+          window.location.replace(
+            paymentGatewayURL(payOption!, totalPrice, order.id)
+          );
         } catch {
           // dismiss loading
           await dismiss();

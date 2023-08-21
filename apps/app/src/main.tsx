@@ -4,14 +4,12 @@ import {
   persistentLocalCache,
   persistentMultipleTabManager,
 } from "firebase/firestore";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReCaptchaV3Provider, initializeAppCheck } from "firebase/app-check";
 
 import App from "./App";
-import { RecoilRoot } from "recoil";
+import { Providers } from "./Providers";
 import { createRoot } from "react-dom/client";
 import { initializeApp } from "firebase/app";
-
-const queryClient = new QueryClient();
 
 const firebaseConfig = {
   apiKey: "AIzaSyDpRsaLBzTnR1hN1YCkePRqI6BpVdq_NQw",
@@ -30,13 +28,14 @@ export const db = initializeFirestore(app, {
     cacheSizeBytes: CACHE_SIZE_UNLIMITED,
   }),
 });
+export const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider("6LfXQEonAAAAAAjWlyLuYkL040qQff7DhZVxVCip")
+});
 
 const container = document.getElementById("root");
 const root = createRoot(container!);
 root.render(
-  <RecoilRoot>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  </RecoilRoot>
+  <Providers>
+    <App />
+  </Providers>
 );

@@ -1,8 +1,0 @@
-
-dist
-build
-node_modules
-.env
-serviceAccountKey.json
-invoice.pdf
-invoice_*.pdf

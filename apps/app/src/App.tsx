@@ -70,7 +70,7 @@ const Receipt = lazy(() => import("./pages/Order/Receipt"));
 const MyCards = lazy(() => import("./pages/Account/MyCards"));
 const Intro = lazy(() => import("./pages/Intro"));
 const About = lazy(() => import("./pages/About"));
-const ProcessPayment = lazy(() => import("./pages/Order/ProcessPayment"));
+const PaymentSuccess = lazy(() => import("./pages/Order/PaymentSuccess"));
 
 setupIonicReact();
 
@@ -185,9 +185,9 @@ function App() {
                   <Route exact path="/my-favorites">
                     <MyFavorites />
                   </Route>
-                  <Route exact path="/orders/:order_id/process-payment/">
+                  <Route exact path="/orders/:order_id/payment-success">
                     <Suspense>
-                      <ProcessPayment />
+                      <PaymentSuccess />
                     </Suspense>
                   </Route>
                   <Route exact path="/orders/:order_id/receipt">
