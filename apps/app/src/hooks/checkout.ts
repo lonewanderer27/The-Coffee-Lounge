@@ -59,7 +59,7 @@ export const useCheckout = (totalPrice: number) => {
 
   const [showAlert, hideAlert] = useIonAlert();
 
-  function addOrder() {
+  function handlePay() {
     if (!currentUser) {
       router.push("/login");
       return;
@@ -97,6 +97,11 @@ export const useCheckout = (totalPrice: number) => {
 
           console.log("Success adding order: ", order);
 
+          // redirect to payment gateway
+          window.location.replace(
+            paymentGatewayURL(payOption!, totalPrice, order.id)
+          );
+
           // clear the cart
           setCart([]);
           setPayOption(null);
@@ -109,11 +114,6 @@ export const useCheckout = (totalPrice: number) => {
 
           // dismiss loading
           await dismiss();
-
-          // redirect to payment gateway
-          window.location.replace(
-            paymentGatewayURL(payOption!, totalPrice, order.id)
-          );
         } catch {
           // dismiss loading
           await dismiss();
@@ -124,7 +124,7 @@ export const useCheckout = (totalPrice: number) => {
               "There was an error adding your order. Would you like to try again?",
             buttons: [
               "Cancel",
-              { text: "Try Again", handler: () => addOrder() },
+              { text: "Try Again", handler: () => handlePay() },
             ],
             onDidDismiss: () => hideAlert(),
           });
@@ -134,6 +134,6 @@ export const useCheckout = (totalPrice: number) => {
   }
 
   return {
-    handlePay: addOrder,
+    handlePay
   };
 };
