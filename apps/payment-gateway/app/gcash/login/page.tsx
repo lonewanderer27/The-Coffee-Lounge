@@ -76,7 +76,9 @@ export default function GCashLogin() {
           >
             <FormLabel>Mobile Number</FormLabel>
             <InputGroup>
-              <InputLeftAddon children="+63" />
+              <InputLeftAddon>
+                +63
+              </InputLeftAddon>
               <Input
                 type="tel"
                 {...register("mobileNumber", {
