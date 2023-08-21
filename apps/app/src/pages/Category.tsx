@@ -62,7 +62,7 @@ export default function CategoryPage() {
         <IonToolbar>
           <IonTitle>{category.name}</IonTitle>
           <IonButtons slot="start">
-            <IonBackButton></IonBackButton>
+            <IonBackButton defaultHref="/"></IonBackButton>
           </IonButtons>
           {!isPlatform("ios") && (
             <IonButtons slot="end">
