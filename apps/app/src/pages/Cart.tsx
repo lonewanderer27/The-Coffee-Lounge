@@ -73,7 +73,7 @@ const Cart: React.FC = () => {
         <IonToolbar>
           <IonRow className="ion-align-items-center">
             <IonCol
-              size="7"
+              size="6"
               className="ion-justify-content-center ion-align-items-center"
             >
               <div
@@ -95,7 +95,11 @@ const Cart: React.FC = () => {
               </div>
             </IonCol>
             <IonCol>
-              <IonButton disabled={count === 0} routerLink="/checkout">
+              <IonButton
+                disabled={count === 0}
+                routerLink="/checkout"
+                shape="round"
+              >
                 Checkout
               </IonButton>
             </IonCol>
@@ -107,5 +111,3 @@ const Cart: React.FC = () => {
 };
 
 export default memo(Cart);
-
-

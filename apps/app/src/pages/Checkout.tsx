@@ -125,11 +125,12 @@ function Checkout() {
         </IonList>
       </IonContent>
       <IonFooter>
-        <IonToolbar className="ion-padding">
+        <IonToolbar className="p-2">
           <IonButton
             expand="block"
             disabled={!readyToPay}
             onClick={() => handlePay()}
+            shape="round"
           >
             <IonLabel>Pay</IonLabel>
           </IonButton>
