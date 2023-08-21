@@ -1,9 +1,17 @@
 import {
+  DeliveryOptionType,
+  DeliveryStatusType,
+  OrderType,
+  PaymentOptionType,
+  PaymentStatusType,
+} from "../../types";
+import {
   IonBackButton,
   IonButton,
   IonButtons,
   IonCol,
   IonContent,
+  IonFooter,
   IonGrid,
   IonHeader,
   IonImg,
@@ -18,27 +26,27 @@ import {
 } from "@ionic/react";
 import { doc, getFirestore } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 
+import { Branches } from "../../constants";
 import { OrderConvert } from "../../converters/orders";
 import OrderDescription from "../../utils";
-import { OrderType } from "../../types";
 import { orderAtom } from "../../atoms/order";
 import { phpString } from "../../phpString";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useParams } from "react-router";
-import { useRecoilValue } from "recoil";
 
 const Data = (props: { order_id: string; orderDetails: OrderType | null }) => {
+  const setOrderDetails = useSetRecoilState(orderAtom);
   const db = getFirestore();
   const [totalCount, setTotalCount] = useState(0);
   const [order, loading] = useDocumentData(
     doc(db, "orders", props.order_id ?? props.orderDetails?.id).withConverter(
       OrderConvert
-    ),
-    {
-      initialValue: props.orderDetails,
-    }
+    )
   );
+
+  console.log("order", order);
 
   useEffect(() => {
     if (order) {
@@ -48,24 +56,24 @@ const Data = (props: { order_id: string; orderDetails: OrderType | null }) => {
       });
 
       setTotalCount(count);
+      setOrderDetails(order);
     }
   }, [order]);
-
-  if (loading) {
-    return <IonLoading isOpen={loading} />;
-  }
 
   return (
     <IonGrid>
       <IonRow>
         <IonList className="ion-no-margin">
-          {order!.products
+          {order?.products
             .filter((product) => product.product_snapshot)
-            .map((product) => (
-              <IonItem key={`ionitem:${product.name}`} className="m-0">
+            .map((product, index) => (
+              <IonItem
+                key={`ionitem:${product.product_id}:${index}`}
+                className="m-0"
+              >
                 <IonRow>
                   <IonCol size="2">
-                    <div className="bg-slate-200 dark:bg-gray-700 p-2 rounded-xl">
+                    <div className="bg-slate-200 dark:bg-gray-700 p-2 rounded-xl w-full">
                       <IonImg
                         src={product.product_snapshot.image}
                         alt={product.product_snapshot.name}
@@ -104,15 +112,15 @@ const Data = (props: { order_id: string; orderDetails: OrderType | null }) => {
           <IonText className="text-right w-full">Items</IonText>
         </IonCol>
         <IonCol size="4" className="text-center">
-          {totalCount}
+          x {totalCount}
         </IonCol>
       </IonRow>
       <IonRow className="m-0 w-full">
         <IonCol size="8" className="text-right">
           <IonText className="text-right w-full ">Total Price</IonText>
         </IonCol>
-        <IonCol size="4" className="text-center font-bold text-lg">
-          {phpString.format(order!.total_price)}
+        <IonCol size="4" className="text-center font-bold">
+          {phpString.format(order?.total_price || 0)}
         </IonCol>
       </IonRow>
       <IonRow className="ion-margin-top w-full">
@@ -120,7 +128,15 @@ const Data = (props: { order_id: string; orderDetails: OrderType | null }) => {
           <IonText className="text-right w-full ">Payment Method</IonText>
         </IonCol>
         <IonCol size="4" className="text-center">
-          {order!.payment_option}
+          {order?.payment_option}
+        </IonCol>
+      </IonRow>
+      <IonRow className="w-full">
+        <IonCol size="8" className="text-right">
+          <IonText className="text-right w-full ">Paid</IonText>
+        </IonCol>
+        <IonCol size="4" className="text-center">
+          {order?.payment_status.toUpperCase()}
         </IonCol>
       </IonRow>
     </IonGrid>
@@ -129,7 +145,7 @@ const Data = (props: { order_id: string; orderDetails: OrderType | null }) => {
 
 export default function Order() {
   const { order_id } = useParams<{ order_id: string }>();
-  const orderDetails = useRecoilValue(orderAtom);
+  const order = useRecoilValue(orderAtom);
 
   return (
     <IonPage>
@@ -140,17 +156,35 @@ export default function Order() {
             <IonBackButton defaultHref="/orders"></IonBackButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton
-              routerLink={`/orders/${order_id ?? orderDetails?.id}/receipt`}
-            >
+            <IonButton routerLink={`/orders/${order_id ?? order?.id}/receipt`}>
               Receipt
             </IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen className="ion-padding-vertical">
-        <Data order_id={order_id} orderDetails={orderDetails} />
+        <Data order_id={order_id} orderDetails={order} />
       </IonContent>
+      <IonFooter>
+        <IonToolbar className="p-2">
+          {order?.payment_status === PaymentStatusType.Pending && (
+            <IonButton expand="block" color="primary" shape="round">
+              Pay Now
+            </IonButton>
+          )}
+          {order?.delivery_status === DeliveryStatusType.Pending && (
+            <IonButton
+              expand="block"
+              fill="outline"
+              color="danger"
+              className="ion-margin-top"
+              shape="round"
+            >
+              Cancel
+            </IonButton>
+          )}
+        </IonToolbar>
+      </IonFooter>
     </IonPage>
   );
 }

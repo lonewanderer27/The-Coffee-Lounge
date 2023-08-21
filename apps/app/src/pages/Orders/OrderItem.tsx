@@ -12,7 +12,7 @@ import {
   IonText,
   useIonViewWillEnter,
 } from "@ionic/react";
-import { OrderType, ProductType } from "../../types";
+import { OrderType, PaymentStatusType, ProductType } from "../../types";
 import {
   collection,
   getDocs,
@@ -94,7 +94,7 @@ function OrderItem(props: OrderType) {
           </>
         ))}
       </IonRow>
-      <IonRow className="my-0 mx-2">
+      <IonRow className="my-2 mx-2">
         <IonCol size="10" className="flex">
           <IonText className="text-right w-full">Total Items</IonText>
         </IonCol>
@@ -102,6 +102,14 @@ function OrderItem(props: OrderType) {
           <IonText className="text-right w-full">{totalCount()}</IonText>
         </IonCol>
       </IonRow>
+      {props.payment_status == PaymentStatusType.Pending && (
+        <IonRow className="mt-5 mx-0 flex justify-end">
+          {/* <span className="mr-3">Pay Now</span>
+          <span className="mr-3">{" | "}</span>
+          <span>Cancel</span> */}
+          <span>Pending Payment</span>
+        </IonRow>
+      )}
       <IonButton
         fill="clear"
         className="w-full text-inherit ion-no-margin ion-no-padding"
