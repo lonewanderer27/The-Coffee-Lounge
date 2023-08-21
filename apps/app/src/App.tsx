@@ -33,29 +33,51 @@ import {
   starOutline,
 } from "ionicons/icons";
 
-import Account from "./pages/Account";
-import Cart from "./pages/Cart";
-import CategoryPage from "./pages/Category";
-import Checkout from "./pages/Checkout";
-import EditDeliveryAddress from "./pages/EditDeliveryAddress";
-import Explore from "./pages/Explore";
 import Home from "./pages/Home";
 import { IonReactRouter } from "@ionic/react-router";
 import Login from "./pages/Login";
-import MyFavorites from "./pages/MyFavorites";
 import Onboarding from "./pages/Onboarding";
-import Order from "./pages/Order/Order";
-import Orders from "./pages/Orders";
 import PaymentMethods from "./pages/Checkout/PaymentMethods";
 import { Preferences } from "@capacitor/preferences";
-import ProductPage from "./pages/Product";
-import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
 import { getAuth } from "firebase/auth";
 import { motion } from "framer-motion";
 import { registerSW } from "virtual:pwa-register";
 import { setupIonicReact } from "@ionic/react";
 import { useAuthState } from "react-firebase-hooks/auth";
+
+// import ProductPage from "./pages/Product";
+const ProductPage = lazy(() => import("./pages/Product"));
+
+// import Register from "./pages/Register";
+const Register = lazy(() => import("./pages/Register"));
+
+// import CategoryPage from "./pages/Category";
+const CategoryPage = lazy(() => import("./pages/Category"));
+
+// import Orders from "./pages/Orders";
+const Orders = lazy(() => import("./pages/Orders"));
+
+// import Order from "./pages/Order/Order";
+const Order = lazy(() => import("./pages/Order/Order"));
+
+// import EditDeliveryAddress from "./pages/EditDeliveryAddress";
+const EditDeliveryAddress = lazy(() => import("./pages/EditDeliveryAddress"));
+
+// import Cart from "./pages/Cart";
+const Cart = lazy(() => import("./pages/Cart"));
+
+const Checkout = lazy(() => import("./pages/Checkout"));
+// import Checkout from "./pages/Checkout";
+
+const Explore = lazy(() => import("./pages/Explore"));
+// import Explore from "./pages/Explore";
+
+const MyFavorites = lazy(() => import("./pages/MyFavorites"));
+// import MyFavorites from "./pages/MyFavorites";
+
+// import Account from "./pages/Account";
+const Account = lazy(() => import("./pages/Account"));
 
 const DeliveryAddresses = lazy(() => import("./pages/DeliveryAddresses"));
 const Card = lazy(() => import("./pages/Account/Cards/Card"));
@@ -101,10 +123,10 @@ function App() {
             text: "Update",
             handler: () => {
               updateSW(true);
-            }
-          }
-        ]
-      })
+            },
+          },
+        ],
+      });
     },
   });
 
@@ -134,7 +156,9 @@ function App() {
                 <Route exact path="/virtualVisit/index.html" />
                 <AuthWrapper>
                   <Route exact path="/account">
-                    <Account setIntro={setIntroSeen} />
+                    <Suspense>
+                      <Account setIntro={setIntroSeen} />
+                    </Suspense>
                   </Route>
                   <Route exact path="/account/accountandsecurity">
                     <Suspense>
@@ -152,10 +176,14 @@ function App() {
                     </Suspense>
                   </Route>
                   <Route exact path="/account/changepass">
-                    <ChangePassword />
+                    <Suspense>
+                      <ChangePassword />
+                    </Suspense>
                   </Route>
                   <Route exact path="/checkout/">
-                    <Checkout />
+                    <Suspense>
+                      <Checkout />
+                    </Suspense>
                   </Route>
                   <Route exact path="/checkout/choose-payoption">
                     <PaymentMethods />
@@ -169,7 +197,9 @@ function App() {
                     exact
                     path="/account/delivery-addresses/edit/:address_id"
                   >
-                    <EditDeliveryAddress />
+                    <Suspense>
+                      <EditDeliveryAddress />
+                    </Suspense>
                   </Route>
                   <Route exact path="/account/delivery-addresses/choose">
                     <Suspense>
@@ -177,13 +207,19 @@ function App() {
                     </Suspense>
                   </Route>
                   <Route exact path="/orders">
-                    <Orders />
+                    <Suspense>
+                      <Orders />
+                    </Suspense>
                   </Route>
                   <Route exact path="/orders/:order_id">
-                    <Order />
+                    <Suspense>
+                      <Order />
+                    </Suspense>
                   </Route>
                   <Route exact path="/my-favorites">
-                    <MyFavorites />
+                    <Suspense>
+                      <MyFavorites />
+                    </Suspense>
                   </Route>
                   <Route exact path="/orders/:order_id/payment-success">
                     <Suspense>
@@ -208,16 +244,22 @@ function App() {
                   </Suspense>
                 </Route>
                 <Route exact path="/explore">
-                  <Explore />
+                  <Suspense>
+                    <Explore />
+                  </Suspense>
                 </Route>
                 <Route exact path="/cart">
-                  <Cart />
+                  <Suspense>
+                    <Cart />
+                  </Suspense>
                 </Route>
                 <Route exact path="/">
                   <Redirect to="/home" />
                 </Route>
                 <Route exact path="/register">
-                  <Register />
+                  <Suspense>
+                    <Register />
+                  </Suspense>
                 </Route>
                 <Route exact path="/login">
                   <Login />
@@ -226,13 +268,19 @@ function App() {
                   <SignIn />
                 </Route>
                 <Route exact path="/category">
-                  <CategoryPage />
+                  <Suspense>
+                    <CategoryPage />
+                  </Suspense>
                 </Route>
                 <Route exact path="/product/:product_id">
-                  <ProductPage />
+                  <Suspense>
+                    <ProductPage />
+                  </Suspense>
                 </Route>
                 <Route exact path="/about">
-                  <About />
+                  <Suspense>
+                    <About />
+                  </Suspense>
                 </Route>
               </IonRouterOutlet>
               <IonTabBar slot="bottom">
