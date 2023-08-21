@@ -156,9 +156,13 @@ export default function Order() {
             <IonBackButton defaultHref="/orders"></IonBackButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton routerLink={`/orders/${order_id ?? order?.id}/receipt`}>
-              Receipt
-            </IonButton>
+            {order?.payment_status == PaymentStatusType.Paid && (
+              <IonButton
+                routerLink={`/orders/${order_id ?? order?.id}/receipt`}
+              >
+                Receipt
+              </IonButton>
+            )}
           </IonButtons>
         </IonToolbar>
       </IonHeader>
