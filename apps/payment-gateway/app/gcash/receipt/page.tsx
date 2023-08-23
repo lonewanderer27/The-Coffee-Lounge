@@ -10,7 +10,8 @@ export default function Receipt() {
   const searchParams = useSearchParams();
   const merchant = searchParams.get("merchant");
   const amountDue = searchParams.get("amountDue");
-  const referenceNo = searchParams.get("referenceNo");
+  const referenceNo =
+    searchParams.get("referenceNo") || "2VF7I3J9P5JKFJJ8J5Z5ZA";
   const callbackUrl = searchParams.get("callbackUrl");
 
   useEffect(() => {
@@ -18,17 +19,17 @@ export default function Receipt() {
       if (callbackUrl) {
         r.push(callbackUrl);
       }
-    }, 3000)
+    }, 3000);
 
     return () => clearTimeout(timer);
-  })
+  });
 
   return (
     <div className="h-screen flex flex-col items-center">
       <div>
         <img src="/gcash/logo.png" alt="GCash Logo" className="mt-20 h-14" />
       </div>
-      <div className="rounded-md card bg-base-100 shadow-md px-5 sm:px-10 absolute top-52 py-8 max-[430px]:w-full sm:w-[400px]">
+      <div className="rounded-md card bg-base-100 shadow-md px-5 sm:px-10 absolute top-52 py-8 max-[430px]:w-11/12 sm:w-[400px]">
         <span className="sm:py-4">
           <div className="flex justify-between py-1">
             <h2 className="card-title pb-2 text-gcash">{merchant}</h2>
