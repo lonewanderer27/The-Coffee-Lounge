@@ -121,8 +121,8 @@ function App() {
         buttons: [
           {
             text: "Update",
-            handler: () => {
-              updateSW(true);
+            handler: async () => {
+              await updateSW(true);
             },
           },
         ],
