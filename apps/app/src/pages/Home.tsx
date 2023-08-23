@@ -80,7 +80,7 @@ const Home: React.FC = () => {
   const handleRefresh = useRefresh([refresh, productsRefresh]);
 
   if (auth.currentUser != null && auth.currentUser?.displayName == null) {
-    router.push("/onboarding");
+    router.push("/onboarding", "forward", "replace");
   }
 
   if (loading || productsLoading) {

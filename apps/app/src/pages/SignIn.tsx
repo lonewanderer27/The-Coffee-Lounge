@@ -152,11 +152,19 @@ const SignIn = () => {
 
 const Chooser = memo(() => {
   const [loginProvider, setLoginProvider] = useRecoilState(loginProviderAtom);
+  const r = useIonRouter();
 
   return (
     <>
+      <div className="mt-4"></div>
       <IonButton
-        className="ion-margin-top"
+        color="light"
+        onClick={() => setLoginProvider(LoginProvider.EmailOTP)}
+      >
+        <IonText>Send Magic Link</IonText>
+        <IonIcon slot="start" src={mail} />
+      </IonButton>
+      <IonButton
         color="light"
         onClick={() => setLoginProvider(LoginProvider.Google)}
         disabled
@@ -165,23 +173,18 @@ const Chooser = memo(() => {
         <IonIcon slot="start" src={logoGoogle} />
       </IonButton>
 
-      <IonButton
-        color="light"
-        onClick={() => setLoginProvider(LoginProvider.EmailOTP)}
-      >
-        <IonText>Send Magic Link</IonText>
-        <IonIcon slot="start" src={mail} />
-      </IonButton>
-
       <div className="inline-flex items-center justify-center w-full">
-        <hr className="w-64 h-px my-8 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+        <hr className="w-64 h-px my-10 bg-gray-200 border-0 dark:bg-gray-700"></hr>
         <span className="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white  dark:text-white dark:bg-gray-900">
           OR
         </span>
       </div>
 
-      {/* <Action link="/login" text="Sign in with password" /> */}
-      <IonButton expand="block" fill="clear" routerLink="/login">
+      <IonButton
+        expand="block"
+        fill="clear"
+        onClick={() => r.push("/login", "forward", "replace")}
+      >
         Sign In With Password
       </IonButton>
     </>
@@ -194,7 +197,7 @@ const EmailOTP = memo((props: { handleEmailOTP: () => void }) => {
 
   return (
     <div className="w-full">
-      <form>
+      <form className="mt-8">
         <IonInput
           value={email}
           fill="outline"

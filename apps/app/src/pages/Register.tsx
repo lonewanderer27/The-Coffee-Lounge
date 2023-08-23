@@ -28,6 +28,7 @@ import {
   IonToolbar,
   isPlatform,
   useIonLoading,
+  useIonRouter,
   useIonToast,
 } from "@ionic/react";
 import { SubmitHandler, useController, useForm } from "react-hook-form";
@@ -57,6 +58,7 @@ interface IFormInput {
 }
 
 const Register: React.FC = () => {
+  const router = useIonRouter();
   const db = getFirestore();
   const auth = getAuth();
   const history = useHistory();
@@ -95,19 +97,17 @@ const Register: React.FC = () => {
 
         // construct the user data
         const userData: {
-          nickname: string;
+          createdAt: FieldValue;
           updatedAt: FieldValue;
-          pronouns?: string;
         } = {
-          nickname: data.nickname,
+          createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
-          ...(data.pronouns && { pronouns: data.pronouns }),
         };
 
         // create a user in users documents
         (async () => {
           await setDoc(doc(db, "users", user.uid), userData);
-          history.push("/home");
+          router.push("/home", "forward", "replace");
         })();
       })
       .catch((error) => {
@@ -161,29 +161,8 @@ const Register: React.FC = () => {
               type="password"
               {...register("password", { required: true })}
             />
-
-            <IonRow className="mt-2">
-              <IonCol className=" pl-0">
-                <IonInput
-                  fill="outline"
-                  label="Nickname"
-                  labelPlacement="floating"
-                  type="text"
-                  {...register("nickname", { required: true })}
-                ></IonInput>
-              </IonCol>
-              <IonCol className="pr-0">
-                <IonInput
-                  fill="outline"
-                  labelPlacement="floating"
-                  label="Pronouns (Optional)"
-                  type="text"
-                  {...register("pronouns", { required: false })}
-                ></IonInput>
-              </IonCol>
-            </IonRow>
-
-            <p className="ion-text-center ion-margin-top">
+            
+            <p className="ion-text-center mt-8">
               By tapping "Create Account" you agree to our{" "}
               <IonRouterLink>Terms of Use</IonRouterLink> and{" "}
               <IonRouterLink>Privacy Policy</IonRouterLink>
@@ -199,8 +178,8 @@ const Register: React.FC = () => {
             </IonButton>
             <Action
               message="Have an account?"
-              link="/login"
-              text="Login"
+              link="/signin"
+              text="Signin"
               align="center"
             />
           </form>

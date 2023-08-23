@@ -97,7 +97,7 @@ function Onboarding() {
 
       // navigate to home
       setLoading(false);
-      router.push("/home");
+      router.push("/home", "forward", "replace");
     } catch (err: unknown) {
       const error = err as FirebaseError;
       console.error(err);

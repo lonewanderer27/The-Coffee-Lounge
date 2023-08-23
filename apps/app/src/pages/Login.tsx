@@ -91,9 +91,6 @@ const Login: React.FC = () => {
         <div className="h-full flex flex-col justify-center ion-padding ">
           <div className="flex flex-col justify-center text-center">
             <IonImg src={Logo2} className="w-[35%] mx-auto tcl-logo" />
-            {/* <IonText>
-              <h1 className="font-bold">Login</h1>
-            </IonText> */}
             <IonText>
               <p className="text-center font-bold">Welcome Back!</p>
             </IonText>
@@ -102,7 +99,7 @@ const Login: React.FC = () => {
               labelPlacement="floating"
               type="email"
               fill="outline"
-              className="text-start"
+              className="text-start mt-8"
               {...register("email", { required: true })}
             ></IonInput>
             <IonInput
@@ -115,7 +112,7 @@ const Login: React.FC = () => {
             ></IonInput>
           </div>
           <IonCheckbox
-            className="my-2"
+            className="mt-2 mb-4"
             justify="end"
             onIonChange={() => setShowPass((o) => !o)}
           >
@@ -127,9 +124,10 @@ const Login: React.FC = () => {
             type="submit"
             className="ion-margin-top"
             onClick={handleSubmit(onSubmit)}
+            
           >
-            Sign in
-            <IonIcon slot="end" src={logInOutline} />
+            Login
+            {/* <IonIcon slot="start" src={logInOutline} /> */}
           </IonButton>
           <Action
             message="Don't have an account?"
