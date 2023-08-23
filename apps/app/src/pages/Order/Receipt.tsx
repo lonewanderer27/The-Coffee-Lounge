@@ -20,7 +20,6 @@ import { Suspense, lazy, memo } from "react";
 import { doc, getFirestore } from "firebase/firestore";
 
 import { OrderConvert } from "../../converters/orders";
-import ReceiptItems from "./ReceiptItems";
 import { downloadOutline } from "ionicons/icons";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
@@ -28,18 +27,17 @@ import { phpString } from "../../phpString";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import { useParams } from "react-router";
 
+// import ReceiptItems from "./ReceiptItems";
+const ReceiptItems = lazy(() => import("./ReceiptItems"));
+
 // import { appCheck } from "../../main";
 // import axios from "axios";
 
 // import { getToken } from "firebase/app-check";
 
-
-
-
-
 // import { useQuery } from "@tanstack/react-query";
 
-// const QRCode = lazy(() => import("react-qr-code"));
+const QRCode = lazy(() => import("react-qr-code"));
 const Barcode = lazy(() => import("react-barcode"));
 
 function Data(props: { order: OrderType }) {
@@ -161,7 +159,6 @@ function Data(props: { order: OrderType }) {
         >
           <IonRow className="text-center">
             <IonCol size="12" className="text-center">
-              {/* <IonIcon src={shieldCheckmarkOutline} className="text-5xl" /> */}
               <IonImg src="/logo.png" className="w-20 h-auto mx-auto" />
             </IonCol>
           </IonRow>
@@ -272,11 +269,11 @@ function Data(props: { order: OrderType }) {
                 <Barcode value={props.order?.id!} />
               </Suspense>
             </IonRow>
-            {/* <IonRow className="ion-margin-top ion-no-padding w-full">
+            <IonRow className="ion-margin-top ion-no-padding w-full">
               <Suspense>
                 <QRCode value={props.order?.id!} className="mx-auto" />
               </Suspense>
-            </IonRow> */}
+            </IonRow>
           </IonGrid>
         </div>
       </div>
