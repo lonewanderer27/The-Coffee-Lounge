@@ -200,8 +200,7 @@ const EmailOTP = memo((props: { handleEmailOTP: () => void }) => {
           fill="outline"
           type="email"
           label="Email"
-          labelPlacement="floating"
-          className="text-start"
+          // labelPlacement="floating"
           onIonChange={(e) => setEmail(e.detail.value!)}
         />
         <IonButton
@@ -224,4 +223,4 @@ const EmailOTP = memo((props: { handleEmailOTP: () => void }) => {
   );
 });
 
-export default memo(SignIn)
+export default memo(SignIn);

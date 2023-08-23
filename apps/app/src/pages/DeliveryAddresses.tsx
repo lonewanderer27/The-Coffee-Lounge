@@ -42,7 +42,7 @@ import {
   useIonAlert,
   useIonRouter,
 } from "@ionic/react";
-import { RefObject, memo, useRef, useState } from "react";
+import { RefObject, lazy, memo, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
   addOutline,
@@ -54,7 +54,6 @@ import {
 } from "ionicons/icons";
 
 import { DeliveryAddressConvert } from "../converters/user";
-import DeliveryAddressMap from "../components/DeliveryAddressMap";
 import { DeliveryAddressType } from "../types";
 import { FirebaseError } from "firebase/app";
 import { LocationDescription } from "../utils";
@@ -64,6 +63,11 @@ import { useCollectionData } from "react-firebase-hooks/firestore";
 import { useDebounce } from "usehooks-ts";
 import { useMaskito } from "@maskito/react";
 import { useSetRecoilState } from "recoil";
+
+// import DeliveryAddressMap from "../components/DeliveryAddressMap";
+const DeliveryAddressMap = lazy(
+  () => import("../components/DeliveryAddressMap")
+);
 
 function DeliveryAddresses(props: { choose?: boolean }) {
   const db = getFirestore();
@@ -171,7 +175,7 @@ export const DeleteAddressModal = (props: {
   const handleDelete = async () => {
     await deleteDoc(doc(props.addressesRef, props.id));
     await setDoc(props.userRef, { default_address: null }, { merge: true });
-  }
+  };
 
   return (
     <IonAlert
@@ -360,7 +364,7 @@ function NewAddressModal(props: {
                   }}
                   onIonChange={(e) => {
                     if (e.detail.value) {
-                      setValue("phone_number", e.detail.value+"");
+                      setValue("phone_number", e.detail.value + "");
                     }
                   }}
                 ></IonInput>

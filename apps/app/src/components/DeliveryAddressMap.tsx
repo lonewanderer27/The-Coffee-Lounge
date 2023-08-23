@@ -1,4 +1,3 @@
-import { AddressType, DeliveryAddressType } from "../types";
 import {
   AuthenticationType,
   AzureMap,
@@ -10,7 +9,6 @@ import {
 import { data, layer, source } from "azure-maps-control";
 import { memo, useContext, useEffect, useState } from "react";
 
-import { LocationDescription } from "../utils";
 import { useQuery } from "@tanstack/react-query";
 
 const options: IAzureMapOptions = {
