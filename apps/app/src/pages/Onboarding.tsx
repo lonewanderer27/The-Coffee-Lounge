@@ -20,15 +20,12 @@ import {
 import { SubmitHandler, useForm } from "react-hook-form";
 import { getAuth, updateProfile } from "firebase/auth";
 import { memo, useState } from "react";
-import {
-  useDocumentData,
-  useDocumentDataOnce,
-} from "react-firebase-hooks/firestore";
 
 import { FirebaseError } from "firebase/app";
 import ProfileImage from "../components/ProfileImage";
 import { UserConvert } from "../converters/user";
 import { isPlatform } from "@ionic/react";
+import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 
 interface IFormInput {
   nickname: string;
