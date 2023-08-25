@@ -52,10 +52,6 @@ export default function CategoryPage() {
 
   const handleRefresh = useRefresh([refresh]);
 
-  if (productsLoading) {
-    return <></>;
-  }
-
   return (
     <IonPage>
       <IonHeader translucent={true}>
@@ -86,17 +82,15 @@ export default function CategoryPage() {
         <div className="ion-padding">
           <IonText>{category.description}</IonText>
         </div>
-        {productsData !== undefined && (
-          <IonGrid className="ion-padding">
-            <IonRow>
-              {productsData!
-                .filter((product) => product.name != "Loading")
-                .map((product, index) => (
-                  <ProductCard key={`productcard:${index}`} {...product} />
-                ))}
-            </IonRow>
-          </IonGrid>
-        )}
+        <IonGrid className="ion-padding">
+          <IonRow>
+            {productsData
+              ?.filter((product) => product.name != "Loading")
+              .map((product, index) => (
+                <ProductCard key={`productcard:${index}`} {...product} />
+              ))}
+          </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );

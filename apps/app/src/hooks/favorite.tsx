@@ -41,8 +41,8 @@ export default function useFavorite(product_id?: string) {
   };
 
   return {
-    favorites: data?.get("favorites") ?? (["Loading"] as Array<string>),
-    isFavorite: isFavorite(),
+    favorites: data?.get("favorites") ?? (["Loading"] as Array<string>) as Array<string>,
+    isFavorite: isFavorite() as boolean,
     toggleFavorite,
   };
 }

@@ -171,239 +171,232 @@ export default function ProductPage() {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      {productData != undefined && (
-        <>
-          <IonContent fullscreen>
-            <div className="ion-padding bg-slate-200 dark:bg-slate-800">
-              <IonRow className="ion-justify-content-center relative">
-                {currentUser && (
-                  <Heart
-                    className="absolute top-2 right-2"
-                    style={{ width: "2rem" }}
-                    isActive={isFavorite ? true : false}
-                    onClick={() => {
-                      toggleFavorite();
-                    }}
-                    animationTrigger="click"
-                    animationScale={1.2}
-                    inactiveColor="gray"
-                    activeColor="red"
-                  />
-                )}
-                {productData.coffee_type && (
-                  <IonBadge className="absolute top-2 left-2">
-                    {productData.coffee_type}
-                  </IonBadge>
-                )}
-                <IonImg
-                  className={`${
-                    productData.description ? "mb-5" : ""
-                  } w-[60%] h-auto`}
-                  src={productData.image}
-                  alt={productData.name}
-                />
-                <IonText
-                  className={`absolute w-full text-2xl font-semibold bottom-0 ${
-                    !productData.description ? "text-center" : "text-left"
-                  }`}
-                >
-                  {productData.name}
-                </IonText>
-              </IonRow>
-              <IonRow>
-                <IonText className="w-full text-justify">
-                  {productData.description}
-                </IonText>
-              </IonRow>
+      <IonContent fullscreen>
+        <div className="ion-padding bg-slate-200 dark:bg-slate-800">
+          <IonRow className="ion-justify-content-center relative">
+            {currentUser && (
+              <Heart
+                className="absolute top-2 right-2"
+                style={{ width: "2rem" }}
+                isActive={isFavorite ? true : false}
+                onClick={() => {
+                  toggleFavorite();
+                }}
+                animationTrigger="click"
+                animationScale={1.2}
+                inactiveColor="gray"
+                activeColor="red"
+              />
+            )}
+            {productData?.coffee_type && (
+              <IonBadge className="absolute top-2 left-2">
+                {productData.coffee_type}
+              </IonBadge>
+            )}
+            <IonImg
+              className={`${
+                productData?.description ? "mb-5" : ""
+              } w-[60%] h-auto`}
+              src={productData?.image}
+              alt={productData?.name}
+            />
+            <IonText
+              className={`absolute w-full text-2xl font-semibold bottom-0 ${
+                !productData?.description ? "text-center" : "text-left"
+              }`}
+            >
+              {productData?.name}
+            </IonText>
+          </IonRow>
+          <IonRow>
+            <IonText className="w-full text-justify">
+              {productData?.description}
+            </IonText>
+          </IonRow>
+        </div>
+        <form className="ion-padding">
+          {productData?.coffee_type && (
+            <div className="ion-padding">
+              <IonSegment
+                onIonChange={(event) => {
+                  setValue("size", event.detail.value as Size);
+                  computePrice();
+                }}
+                value={watch("size")}
+              >
+                <IonSegmentButton value={Size.Tall}>S</IonSegmentButton>
+                <IonSegmentButton value={Size.Grande}>M</IonSegmentButton>
+                <IonSegmentButton value={Size.Venti}>L</IonSegmentButton>
+              </IonSegment>
             </div>
-            <form className="ion-padding">
-              {productData.coffee_type && (
-                <div className="ion-padding">
-                  <IonSegment
-                    onIonChange={(event) => {
-                      setValue("size", event.detail.value as Size);
+          )}
+          <IonList>
+            <IonItem>
+              <IonCol className="ion-no-padding ion-padding-end">
+                <IonInput
+                  label="Quantity"
+                  className="ion-text-right"
+                  {...register("quantity", { required: true })}
+                  readonly={true}
+                  value={watch("quantity") + ""}
+                ></IonInput>
+              </IonCol>
+              <IonCol size="auto" className="ion ion-no-padding">
+                <IonButton
+                  size="small"
+                  onClick={() => {
+                    if (watch("quantity") > 1)
+                      setValue("quantity", Number(watch("quantity")) - 1);
+                    computePrice();
+                  }}
+                  disabled={watch("quantity") <= 1}
+                >
+                  <IonIcon src={removeOutline} />
+                </IonButton>
+                <IonButton
+                  size="small"
+                  onClick={() => {
+                    setValue("quantity", Number(watch("quantity")) + 1);
+                    computePrice();
+                  }}
+                >
+                  <IonIcon src={addOutline} />
+                </IonButton>
+              </IonCol>
+            </IonItem>
+            {productData?.coffee_type && (
+              <>
+                <IonItem>
+                  <IonSelect
+                    label="Milk"
+                    interface="action-sheet"
+                    interfaceOptions={{
+                      header: "Select your choice of milk",
+                    }}
+                    {...register("milk", { required: false })}
+                    onIonChange={(e) => {
+                      setValue("milk", e.detail.value);
                       computePrice();
                     }}
-                    value={watch("size")}
+                    value={watch("milk")}
                   >
-                    <IonSegmentButton value={Size.Tall}>S</IonSegmentButton>
-                    <IonSegmentButton value={Size.Grande}>M</IonSegmentButton>
-                    <IonSegmentButton value={Size.Venti}>L</IonSegmentButton>
-                  </IonSegment>
-                </div>
-              )}
-              <IonList>
-                <IonItem>
-                  <IonCol className="ion-no-padding ion-padding-end">
-                    <IonInput
-                      label="Quantity"
-                      className="ion-text-right"
-                      {...register("quantity", { required: true })}
-                      readonly={true}
-                      value={watch("quantity") + ""}
-                    ></IonInput>
-                  </IonCol>
-                  <IonCol size="auto" className="ion ion-no-padding">
-                    <IonButton
-                      size="small"
-                      onClick={() => {
-                        if (watch("quantity") > 1)
-                          setValue("quantity", Number(watch("quantity")) - 1);
-                        computePrice();
-                      }}
-                      disabled={watch("quantity") <= 1}
-                    >
-                      <IonIcon src={removeOutline} />
-                    </IonButton>
-                    <IonButton
-                      size="small"
-                      onClick={() => {
-                        setValue("quantity", Number(watch("quantity")) + 1);
-                        computePrice();
-                      }}
-                    >
-                      <IonIcon src={addOutline} />
-                    </IonButton>
-                  </IonCol>
+                    {Object.values(Milk).map((milk) => (
+                      <IonSelectOption
+                        key={"ionselectoption:" + milk}
+                        value={milk}
+                      >
+                        {milk}
+                      </IonSelectOption>
+                    ))}
+                  </IonSelect>
                 </IonItem>
-                {productData.coffee_type && (
+                <IonItem>
+                  <IonSelect
+                    label="Syrup"
+                    interface="action-sheet"
+                    interfaceOptions={{
+                      header: "Select your choice of syrup",
+                    }}
+                    {...register("syrup", { required: false })}
+                    onIonChange={(e) => {
+                      setValue("syrup", e.detail.value);
+                      computePrice();
+                    }}
+                    value={watch("syrup")}
+                  >
+                    {Object.values(Syrup).map((syrup) => (
+                      <IonSelectOption
+                        key={`ionselectoption${syrup}`}
+                        value={syrup}
+                      >
+                        {syrup}
+                      </IonSelectOption>
+                    ))}
+                  </IonSelect>
+                </IonItem>
+                {productData.coffee_type === "Cold Coffee" && (
                   <>
                     <IonItem>
                       <IonSelect
-                        label="Milk"
+                        label="Ice"
                         interface="action-sheet"
                         interfaceOptions={{
-                          header: "Select your choice of milk",
+                          header: "Select the amount of your ice",
                         }}
-                        {...register("milk", { required: false })}
+                        {...register("ice", { required: true })}
                         onIonChange={(e) => {
-                          setValue("milk", e.detail.value);
+                          setValue("ice", e.detail.value);
                           computePrice();
                         }}
-                        value={watch("milk")}
+                        value={watch("ice")}
                       >
-                        {Object.values(Milk).map((milk) => (
+                        {Object.values(Ice).map((ice) => (
                           <IonSelectOption
-                            key={"ionselectoption:" + milk}
-                            value={milk}
+                            key={`ionselectoption:${ice}`}
+                            value={ice}
                           >
-                            {milk}
+                            <IonText>{ice}</IonText>
                           </IonSelectOption>
                         ))}
                       </IonSelect>
                     </IonItem>
                     <IonItem>
                       <IonSelect
-                        label="Syrup"
-                        interface="action-sheet"
+                        label="Additives"
+                        multiple={true}
                         interfaceOptions={{
-                          header: "Select your choice of syrup",
+                          header: "Select up to 2 additives",
                         }}
-                        {...register("syrup", { required: false })}
+                        {...register("additives", {
+                          required: false,
+                        })}
                         onIonChange={(e) => {
-                          setValue("syrup", e.detail.value);
+                          setValue("additives", e.detail.value);
                           computePrice();
                         }}
-                        value={watch("syrup")}
+                        value={watch("additives")}
                       >
-                        {Object.values(Syrup).map((syrup) => (
+                        {Object.values(Additive).map((additive) => (
                           <IonSelectOption
-                            key={`ionselectoption${syrup}`}
-                            value={syrup}
+                            key={`ionselectoption:${additive}`}
+                            value={additive}
                           >
-                            {syrup}
+                            {additive}
                           </IonSelectOption>
                         ))}
                       </IonSelect>
                     </IonItem>
-                    {productData.coffee_type === "Cold Coffee" && (
-                      <>
-                        <IonItem>
-                          <IonSelect
-                            label="Ice"
-                            interface="action-sheet"
-                            interfaceOptions={{
-                              header: "Select the amount of your ice",
-                            }}
-                            {...register("ice", { required: true })}
-                            onIonChange={(e) => {
-                              setValue("ice", e.detail.value);
-                              computePrice();
-                            }}
-                            value={watch("ice")}
-                          >
-                            {Object.values(Ice).map((ice) => (
-                              <IonSelectOption
-                                key={`ionselectoption:${ice}`}
-                                value={ice}
-                              >
-                                <IonText>{ice}</IonText>
-                              </IonSelectOption>
-                            ))}
-                          </IonSelect>
-                        </IonItem>
-                        <IonItem>
-                          <IonSelect
-                            label="Additives"
-                            multiple={true}
-                            interfaceOptions={{
-                              header: "Select up to 2 additives",
-                            }}
-                            {...register("additives", {
-                              required: false,
-                            })}
-                            onIonChange={(e) => {
-                              setValue("additives", e.detail.value);
-                              computePrice();
-                            }}
-                            value={watch("additives")}
-                          >
-                            {Object.values(Additive).map((additive) => (
-                              <IonSelectOption
-                                key={`ionselectoption:${additive}`}
-                                value={additive}
-                              >
-                                {additive}
-                              </IonSelectOption>
-                            ))}
-                          </IonSelect>
-                        </IonItem>
-                      </>
-                    )}
                   </>
                 )}
-              </IonList>
-            </form>
-          </IonContent>
-          <IonFooter>
-            <IonToolbar className="ion-padding-md">
-              <IonRow className="ion-align-items-center">
-                <IonCol
-                  size="6"
-                  className="ion-justify-content-center ion-align-items-center"
-                >
-                  <div className="flex justify-center align-center flex-col w-full text-center">
-                    <IonText>Price</IonText>
-                    <IonText>
-                      <h3 className="ion-no-margin">
-                        {phpString.format(totalPrice * watch("quantity"))}
-                      </h3>
-                    </IonText>
-                  </div>
-                </IonCol>
-                <IonCol>
-                  <IonButton
-                    onClick={() => handleSubmit(onSubmit)()}
-                    shape="round"
-                  >
-                    Add To Cart
-                  </IonButton>
-                </IonCol>
-              </IonRow>
-            </IonToolbar>
-          </IonFooter>
-        </>
-      )}
+              </>
+            )}
+          </IonList>
+        </form>
+      </IonContent>
+      <IonFooter>
+        <IonToolbar className="ion-padding-md">
+          <IonRow className="ion-align-items-center">
+            <IonCol
+              size="6"
+              className="ion-justify-content-center ion-align-items-center"
+            >
+              <div className="flex justify-center align-center flex-col w-full text-center">
+                <IonText>Price</IonText>
+                <IonText>
+                  <h3 className="ion-no-margin">
+                    {phpString.format(totalPrice * watch("quantity"))}
+                  </h3>
+                </IonText>
+              </div>
+            </IonCol>
+            <IonCol>
+              <IonButton onClick={() => handleSubmit(onSubmit)()} shape="round">
+                Add To Cart
+              </IonButton>
+            </IonCol>
+          </IonRow>
+        </IonToolbar>
+      </IonFooter>
     </IonPage>
   );
 }

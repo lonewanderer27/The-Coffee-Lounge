@@ -83,10 +83,6 @@ const Home: React.FC = () => {
     router.push("/onboarding", "forward", "replace");
   }
 
-  if (loading || productsLoading) {
-    return <></>;
-  }
-
   return (
     <IonPage>
       <IonHeader translucent={true}>
@@ -138,7 +134,7 @@ const Home: React.FC = () => {
           </SwiperSlide>
         </Swiper>
         <IonGrid className="ion-padding-vertical">
-          {data!.map((category) => (
+          {data?.map((category) => (
             <IonRow key={category.id + "ionrow"} className="ion-margin-bottom">
               <IonButton
                 fill="clear"
