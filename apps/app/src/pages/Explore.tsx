@@ -22,12 +22,12 @@ import { memo, useRef } from "react";
 
 import AnimatedImg from "../components/AnimatedImg";
 import { EffectCards } from "swiper/modules";
+import Picture1_Outside from "../assets/explore/outdoor/TCL - Picture 1 (OUTSIDE).webp";
+import Picture2_Outside from "../assets/explore/outdoor/TCL - PICTURE 2 (OUTSIDE).webp";
+import Picture_Railing from "../assets/explore/outdoor/the-coffee-lounge-2nd-floor-facing-from-the-outside-railing-day.webp";
 
-const Explore: React.FC = () => {
+const Explore = () => {
   const contentRef = useRef<HTMLIonContentElement>(null);
-  const scrollToTop = () => {
-    contentRef.current && contentRef.current.scrollToTop(300);
-  };
 
   return (
     <IonPage>
@@ -45,7 +45,7 @@ const Explore: React.FC = () => {
         <div className="ion-padding">
           <div style={{ marginBottom: "50px" }}>
             <AnimatedImg
-              src="/outdoor/TCL - PICTURE 2 (OUTSIDE).webp"
+              src={Picture2_Outside}
               style={{ borderRadius: "10px" }}
             />
             <IonText>
@@ -74,7 +74,7 @@ const Explore: React.FC = () => {
               </p>
             </IonText>
             <AnimatedImg
-              src="/outdoor/the-coffee-lounge-2nd-floor-facing-from-the-outside-railing-day.webp"
+              src={Picture_Railing}
               style={{ borderRadius: "10px" }}
             />
             <IonText>
@@ -87,7 +87,7 @@ const Explore: React.FC = () => {
               </p>
             </IonText>
             <AnimatedImg
-              src="/outdoor/TCL - Picture 1 (OUTSIDE).webp"
+              src={Picture1_Outside}
               style={{ borderRadius: "10px" }}
             />
           </div>
