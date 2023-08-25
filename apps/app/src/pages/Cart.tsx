@@ -19,7 +19,7 @@ import {
 } from "@ionic/react";
 
 import CartItem from "../components/CartItem";
-import EmptyCart from "./Cart/EmptyCart";
+import Empty from "../components/Empty";
 import { memo } from "react";
 import { phpString } from "../phpString";
 import { useCart } from "../hooks/cart";
@@ -60,7 +60,7 @@ const Cart: React.FC = () => {
             )}
           </IonList>
         )}
-        {count === 0 && <EmptyCart />}
+        {count === 0 && <Empty />}
       </IonContent>
       <IonFooter>
         <IonToolbar>

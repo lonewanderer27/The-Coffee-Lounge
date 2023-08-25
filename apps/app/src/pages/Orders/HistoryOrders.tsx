@@ -14,6 +14,7 @@ import {
 } from "react-firebase-hooks/firestore";
 
 import { DeliveryStatusType } from "../../types";
+import Empty from "../../components/Empty";
 import { OrderConvert } from "../../converters/orders";
 import OrderItem from "./OrderItem";
 import { getAuth } from "firebase/auth";
@@ -42,6 +43,7 @@ function HistoryOrders() {
             <OrderItem key={`orderItem:${order.id}:${index}`} {...order} />
           ))}
         </IonRow>
+        {orders?.length === 0 && <Empty title="orders" />}
       </IonGrid>
     </IonContent>
   );

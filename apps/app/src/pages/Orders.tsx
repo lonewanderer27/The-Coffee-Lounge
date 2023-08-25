@@ -1,8 +1,7 @@
 import {
   IonBackButton,
   IonButtons,
-  IonContent,
-  IonHeader,
+  IonLabel,
   IonPage,
   IonSegment,
   IonSegmentButton,
@@ -27,8 +26,12 @@ function Orders() {
             setActiveSegment(e.detail.value as any);
           }}
         >
-          <IonSegmentButton value="ongoing">Ongoing</IonSegmentButton>
-          <IonSegmentButton value="history">History</IonSegmentButton>
+          <IonSegmentButton value="ongoing">
+            <IonLabel>Ongoing</IonLabel>
+          </IonSegmentButton>
+          <IonSegmentButton value="history">
+            <IonLabel>History</IonLabel>
+          </IonSegmentButton>
         </IonSegment>
         <IonButtons slot="start">
           <IonBackButton></IonBackButton>

@@ -9,9 +9,11 @@ import {
 } from "firebase/firestore";
 
 import { DeliveryStatusType } from "../../types";
+import Empty from "../../components/Empty";
 import { OrderConvert } from "../../converters/orders";
 import OrderItem from "./OrderItem";
 import { getAuth } from "firebase/auth";
+import { memo } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
 function OngoingOrders() {
@@ -43,8 +45,9 @@ function OngoingOrders() {
           </IonItem>
         ))}
       </IonList>
+      {orders?.length === 0 && (<Empty title="orders" />)}
     </IonContent>
   );
 }
 
-export default OngoingOrders;
+export default memo(OngoingOrders);
