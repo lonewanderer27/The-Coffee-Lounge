@@ -33,52 +33,30 @@ import {
   starOutline,
 } from "ionicons/icons";
 
-import Home from "./pages/Home";
 import { IonReactRouter } from "@ionic/react-router";
-import Login from "./pages/Login";
-import Onboarding from "./pages/Onboarding";
-import PaymentMethods from "./pages/Checkout/PaymentMethods";
 import { Preferences } from "@capacitor/preferences";
-import SignIn from "./pages/SignIn";
 import { getAuth } from "firebase/auth";
 import { motion } from "framer-motion";
 import { registerSW } from "virtual:pwa-register";
 import { setupIonicReact } from "@ionic/react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-// import ProductPage from "./pages/Product";
+const PaymentMethods = lazy(() => import("./pages/Checkout/PaymentMethods"));
+const SignIn = lazy(() => import("./pages/SignIn"));
+const Login = lazy(() => import("./pages/Login"));
+const Home = lazy(() => import("./pages/Home"));
+const Onboarding = lazy(() => import("./pages/Onboarding"));
 const ProductPage = lazy(() => import("./pages/Product"));
-
-// import Register from "./pages/Register";
 const Register = lazy(() => import("./pages/Register"));
-
-// import CategoryPage from "./pages/Category";
 const CategoryPage = lazy(() => import("./pages/Category"));
-
-// import Orders from "./pages/Orders";
 const Orders = lazy(() => import("./pages/Orders"));
-
-// import Order from "./pages/Order/Order";
 const Order = lazy(() => import("./pages/Order/Order"));
-
-// import EditDeliveryAddress from "./pages/EditDeliveryAddress";
 const EditDeliveryAddress = lazy(() => import("./pages/EditDeliveryAddress"));
-
-// import Cart from "./pages/Cart";
 const Cart = lazy(() => import("./pages/Cart"));
-
 const Checkout = lazy(() => import("./pages/Checkout"));
-// import Checkout from "./pages/Checkout";
-
 const Explore = lazy(() => import("./pages/Explore"));
-// import Explore from "./pages/Explore";
-
 const MyFavorites = lazy(() => import("./pages/MyFavorites"));
-// import MyFavorites from "./pages/MyFavorites";
-
-// import Account from "./pages/Account";
 const Account = lazy(() => import("./pages/Account"));
-
 const DeliveryAddresses = lazy(() => import("./pages/DeliveryAddresses"));
 const Card = lazy(() => import("./pages/Account/Cards/Card"));
 const VirtualVisit = lazy(() => import("./pages/VirtualVisit"));
@@ -186,7 +164,9 @@ function App() {
                     </Suspense>
                   </Route>
                   <Route exact path="/checkout/choose-payoption">
-                    <PaymentMethods />
+                    <Suspense>
+                      <PaymentMethods />
+                    </Suspense>
                   </Route>
                   <Route exact path="/account/delivery-addresses">
                     <Suspense>
@@ -236,7 +216,9 @@ function App() {
                   </Route>
                 </AuthWrapper>
                 <Route exact path="/home">
-                  <Home />
+                  <Suspense>
+                    <Home />
+                  </Suspense>
                 </Route>
                 <Route exact path="/virtualVisit">
                   <Suspense>
@@ -262,10 +244,14 @@ function App() {
                   </Suspense>
                 </Route>
                 <Route exact path="/login">
-                  <Login />
+                  <Suspense>
+                    <Login />
+                  </Suspense>
                 </Route>
                 <Route path="/signin/">
-                  <SignIn />
+                  <Suspense>
+                    <SignIn />
+                  </Suspense>
                 </Route>
                 <Route exact path="/category">
                   <Suspense>
@@ -332,7 +318,11 @@ export const AuthWrapper = ({
         "/signin?redirect=" + router.routeInfo.pathname.split("/")[1]
       );
     }
-    return (<SignIn />) as unknown as JSX.Element;
+    return (
+      <Suspense>
+        <SignIn />
+      </Suspense>
+    ) as unknown as JSX.Element;
   }
 
   return <></>;

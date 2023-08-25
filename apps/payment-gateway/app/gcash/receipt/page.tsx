@@ -13,11 +13,15 @@ export default function Receipt() {
   const referenceNo =
     searchParams.get("referenceNo") || "2VF7I3J9P5JKFJJ8J5Z5ZA";
   const callbackUrl = searchParams.get("callbackUrl");
+  const redirectUrl = searchParams.get("redirectUrl");
 
   useEffect(() => {
     const timer = setTimeout(() => {
       if (callbackUrl) {
-        r.push(callbackUrl);
+        // TODO: Post to callbackUrl
+      }
+      if (redirectUrl) {
+        r.replace(redirectUrl);
       }
     }, 3000);
 

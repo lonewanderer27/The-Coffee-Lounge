@@ -68,6 +68,7 @@
     "@vitejs/plugin-legacy": "^4.1.1",
     "@vitejs/plugin-react": "^4.0.4",
     "autoprefixer": "^10.4.15",
+    "coffee-lounge-types": "workspace:^",
     "eslint": "^8.47.0",
     "eslint-plugin-react": "^7.33.2",
     "jsdom": "^22.1.0",

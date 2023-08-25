@@ -9,7 +9,6 @@ export default defineConfig({
     react(),
     legacy(),
     VitePWA({
-      registerType: "prompt",
       workbox: {
         maximumFileSizeToCacheInBytes: 5000000,
       },

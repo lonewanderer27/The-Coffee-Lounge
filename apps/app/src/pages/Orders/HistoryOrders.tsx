@@ -38,8 +38,8 @@ function HistoryOrders() {
     <IonContent>
       <IonGrid>
         <IonRow>
-          {orders?.map((order) => (
-            <OrderItem key={`orderItem:${order.id}`} {...order} />
+          {orders?.map((order, index) => (
+            <OrderItem key={`orderItem:${order.id}:${index}`} {...order} />
           ))}
         </IonRow>
       </IonGrid>

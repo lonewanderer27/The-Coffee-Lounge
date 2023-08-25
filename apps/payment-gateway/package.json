@@ -25,6 +25,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
     "recoil": "^0.7.7",
+    "short-uuid": "3.1.1",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6",
     "usehooks-ts": "^2.9.1",

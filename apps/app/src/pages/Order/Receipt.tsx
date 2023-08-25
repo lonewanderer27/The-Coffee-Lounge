@@ -27,16 +27,7 @@ import { phpString } from "../../phpString";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import { useParams } from "react-router";
 
-// import ReceiptItems from "./ReceiptItems";
 const ReceiptItems = lazy(() => import("./ReceiptItems"));
-
-// import { appCheck } from "../../main";
-// import axios from "axios";
-
-// import { getToken } from "firebase/app-check";
-
-// import { useQuery } from "@tanstack/react-query";
-
 const QRCode = lazy(() => import("react-qr-code"));
 const Barcode = lazy(() => import("react-barcode"));
 

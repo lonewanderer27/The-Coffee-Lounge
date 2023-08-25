@@ -1,30 +1,17 @@
 import {
-  IonAvatar,
   IonButton,
   IonCard,
-  IonCardContent,
   IonCardSubtitle,
-  IonChip,
   IonCol,
   IonIcon,
   IonImg,
   IonRow,
   IonText,
-  useIonViewWillEnter,
 } from "@ionic/react";
 import { OrderType, PaymentStatusType, ProductType } from "../../types";
-import {
-  collection,
-  getDocs,
-  getDocsFromCache,
-  getFirestore,
-  query,
-  where,
-} from "firebase/firestore";
-import { memo, useEffect, useState } from "react";
 
-import { ProductConvert } from "../../converters/products";
 import { chevronForwardOutline } from "ionicons/icons";
+import { memo } from "react";
 import { orderAtom } from "../../atoms/order";
 import { phpString } from "../../phpString";
 import { useSetRecoilState } from "recoil";

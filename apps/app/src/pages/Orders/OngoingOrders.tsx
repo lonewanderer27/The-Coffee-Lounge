@@ -37,9 +37,9 @@ function OngoingOrders() {
   return (
     <IonContent className="ion-padding">
       <IonList className="ion-no-padding">
-        {orders?.map((order) => (
+        {orders?.map((order, index) => (
           <IonItem key={`ionitem:${order.id}`}>
-            <OrderItem key={`orderItem:${order.id}`} {...order} />
+            <OrderItem key={`orderItem:${order.id}:${index}`} {...order} />
           </IonItem>
         ))}
       </IonList>

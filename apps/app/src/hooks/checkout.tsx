@@ -29,19 +29,19 @@ import { orderAtom } from "../atoms/order";
 const paymentGatewayURL = (
   paymentOption: PaymentOptionType,
   amountDue: number,
-  orderId: string,
+  orderId: string
 ) => {
   const baseURL = import.meta.env.VITE_PAYMENT_GATEWAY_URL;
-  const callbackUrl = `${window.location.origin}/orders/${orderId}/payment-success`;
+  const redirectUrl = `${window.location.origin}/orders/${orderId}/payment-success`;
   switch (paymentOption) {
     case PaymentOptionType.GCash: {
-      return `${baseURL}/gcash/login?amountDue=${amountDue}.00&merchant=The Coffee Lounge&callbackUrl=${callbackUrl}`;
+      return `${baseURL}/gcash/login?amountDue=${amountDue}.00&merchant=The Coffee Lounge&redirectUrl=${redirectUrl}`;
     }
     default: {
-      return `${baseURL}/gcash/login?amountDue=${amountDue}.00&merchant=The Coffee Lounge&callbackUrl=${callbackUrl}`;
+      return `${baseURL}/gcash/login?amountDue=${amountDue}.00&merchant=The Coffee Lounge&redirectUrl=${redirectUrl}`;
     }
   }
-}
+};
 
 export const useCheckout = (totalPrice: number) => {
   const [cart, setCart] = useRecoilState(cartAtom);
@@ -134,6 +134,6 @@ export const useCheckout = (totalPrice: number) => {
   }
 
   return {
-    handlePay
+    handlePay,
   };
 };
