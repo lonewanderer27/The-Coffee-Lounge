@@ -9,16 +9,11 @@ import {
 } from "firebase/firestore";
 import {
   IonButton,
-  IonCol,
   IonContent,
-  IonHeader,
-  IonImg,
   IonInput,
   IonPage,
   IonRow,
   IonSpinner,
-  IonTitle,
-  IonToolbar,
   useIonAlert,
   useIonRouter,
 } from "@ionic/react";
@@ -31,8 +26,8 @@ import {
 } from "react-firebase-hooks/firestore";
 
 import { FirebaseError } from "firebase/app";
+import ProfileImage from "../components/ProfileImage";
 import { UserConvert } from "../converters/user";
-import { UserType } from "../types";
 import { isPlatform } from "@ionic/react";
 
 interface IFormInput {
@@ -113,11 +108,11 @@ function Onboarding() {
     <IonPage>
       <IonContent className="ion-padding">
         <div className="p-4">
-          <IonImg
-            src={`/people/${
-              watch("gender") == "Female" ? "woman" : "man"
-            }_alt.png`}
-            className="my-5 w-2/4 ml-[-20px]"
+          <ProfileImage
+            currentUser={null}
+            gender={watch("gender")}
+            imgClassName="my-5 w-2/4 ml-[-20px]"
+            onboarding
           />
           <h6 className="font-bold">Before you start</h6>
           <p>
@@ -143,7 +138,7 @@ function Onboarding() {
                     {...register("gender", { required: false })}
                     onInputChange={(v) => {
                       if (v.includes("not say")) {
-                        setValue("gender", "")
+                        setValue("gender", "");
                       } else {
                         setValue("gender", v);
                       }
@@ -164,7 +159,7 @@ function Onboarding() {
                     {...register("pronouns", { required: false })}
                     onInputChange={(v) => {
                       if (v.includes("not say")) {
-                        setValue("pronouns", "")
+                        setValue("pronouns", "");
                       } else {
                         setValue("pronouns", v);
                       }

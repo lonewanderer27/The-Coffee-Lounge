@@ -21,15 +21,15 @@ import {
   IonToolbar,
   useIonRouter,
 } from "@ionic/react";
-import { Suspense, lazy } from "react";
 import { doc, getFirestore } from "firebase/firestore";
 
+import ManAlt from "../assets/people/man_alt.png";
+import ProfileImage from "../components/ProfileImage";
 import { UserConvert } from "../converters/user";
+import WomanAlt from "../assets/people/woman_alt.png";
 import { chevronForwardOutline } from "ionicons/icons";
 import { getAuth } from "firebase/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
-
-const Avatar = lazy(() => import("react-avatar"));
 
 const Account = (props: {
   setIntro: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -40,7 +40,7 @@ const Account = (props: {
   const auth = getAuth();
 
   const ref = doc(db, "users", currentUser!.uid).withConverter(UserConvert);
-  const [userData, userLoading, userError] = useDocument(ref);
+  const [userData] = useDocument(ref);
 
   const logout = () => auth.signOut().then(() => router.push("/signin"));
 
@@ -61,14 +61,11 @@ const Account = (props: {
 
           <IonGrid className="ion-padding-horizontal">
             <IonRow>
-              <IonCol size="auto">
-                {currentUser?.photoURL ? (
-                  <IonImg src={currentUser.photoURL} />
-                ) : (
-                  <Suspense>
-                    <Avatar name={userData?.get("nickname")} round />
-                  </Suspense>
-                )}
+              <IonCol size="4" className="ml-[-5px]">
+                <ProfileImage
+                  currentUser={currentUser}
+                  gender={userData?.get("gender")}
+                />
               </IonCol>
               <IonCol className="ion-padding-start flex items-center">
                 <IonText>
@@ -95,10 +92,10 @@ const Account = (props: {
             <IonListHeader>
               <IonLabel>Settings</IonLabel>
             </IonListHeader>
-            {/* <IonItem>
+            <IonItem>
               <IonLabel>Chat Settings</IonLabel>
               <IonIcon src={chevronForwardOutline}></IonIcon>
-            </IonItem> */}
+            </IonItem>
             <IonItem>
               <IonLabel>Notification Settings</IonLabel>
               <IonIcon src={chevronForwardOutline}></IonIcon>
@@ -110,10 +107,6 @@ const Account = (props: {
             </IonListHeader>
             <IonItem onClick={() => props.setIntro(null)}>
               <IonLabel>About</IonLabel>
-              <IonIcon src={chevronForwardOutline}></IonIcon>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Delete my Account</IonLabel>
               <IonIcon src={chevronForwardOutline}></IonIcon>
             </IonItem>
           </IonList>
