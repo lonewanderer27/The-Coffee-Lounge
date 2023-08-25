@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint"
@@ -34,6 +34,7 @@
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.4.0",
     "azure-maps-control": "3.0.0-preview.10",
+    "coffee-lounge-constants": "workspace:^",
     "firebase": "^10.3.0",
     "framer-motion": "^10.16.1",
     "html2canvas": "^1.4.1",
@@ -43,6 +44,7 @@
     "react": "^18.2.0",
     "react-aria": "^3.27.0",
     "react-avatar": "^5.0.3",
+    "react-avatar-editor": "^13.0.0",
     "react-azure-maps": "1.0.0-beta.3",
     "react-barcode": "^1.4.6",
     "react-credit-cards-2": "^1.0.1",
@@ -64,6 +66,7 @@
     "@capacitor/assets": "2.0.4",
     "@capacitor/cli": "5.2.1",
     "@types/react": "^18.2.21",
+    "@types/react-avatar-editor": "^13.0.0",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-legacy": "^4.1.1",
     "@vitejs/plugin-react": "^4.0.4",
