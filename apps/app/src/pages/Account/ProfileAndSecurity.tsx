@@ -29,14 +29,14 @@ import {
 } from "@ionic/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { doc, getFirestore } from "firebase/firestore";
-import { lazy, memo, useState } from "react";
+import { memo, useState } from "react";
 
 import { FirebaseError } from "firebase/app";
 import ProfileImage from "../../components/ProfileImage";
 import { UserConvert } from "../../converters/user";
 import { chevronForwardOutline } from "ionicons/icons";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useDocument } from "react-firebase-hooks/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
 function ProfileAndSecurity() {
   const db = getFirestore();
@@ -44,7 +44,7 @@ function ProfileAndSecurity() {
   const [data] = useAuthState(auth);
   const [present, dismiss] = useIonLoading();
 
-  const [userData, userLoading] = useDocument(
+  const [userData] = useDocumentData(
     doc(db, "users", auth.currentUser!.uid).withConverter(UserConvert)
   );
 
@@ -122,7 +122,11 @@ function ProfileAndSecurity() {
       <IonContent fullscreen className="ion-padding-bottom">
         <div className="ion-padding flex justify-center ion-margin-top">
           <div className="w-2/4">
-            <ProfileImage currentUser={data} gender={userData?.get("gender")} />
+            <ProfileImage
+              currentUser={data}
+              gender={userData?.gender}
+              showEditBtn
+            />
           </div>
         </div>
         <IonList>
@@ -131,20 +135,16 @@ function ProfileAndSecurity() {
           </IonListHeader>
           <IonItem>
             <IonLabel>Nickname</IonLabel>
-            <IonLabel>{userData?.get("nickname")}</IonLabel>
+            <IonLabel>{userData?.nickname}</IonLabel>
           </IonItem>
-          {userData?.get("pronouns") && (
-            <IonItem>
-              <IonLabel>Pronouns</IonLabel>
-              <IonLabel>{userData?.get("pronouns")}</IonLabel>
-            </IonItem>
-          )}
-          {userData?.get("gender") && (
-            <IonItem>
-              <IonLabel>Gender</IonLabel>
-              <IonLabel>{userData?.get("gender")}</IonLabel>
-            </IonItem>
-          )}
+          <IonItem>
+            <IonLabel>Pronouns</IonLabel>
+            <IonLabel>{userData?.pronouns}</IonLabel>
+          </IonItem>
+          <IonItem>
+            <IonLabel>Gender</IonLabel>
+            <IonLabel>{userData?.gender}</IonLabel>
+          </IonItem>
         </IonList>
         <IonList>
           <IonListHeader>

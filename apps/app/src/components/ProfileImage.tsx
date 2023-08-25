@@ -1,52 +1,76 @@
-import AnimatedImg from "./AnimatedImg";
-import ManAlt from "../assets/people/man_alt.png";
-import { User } from "firebase/auth";
-import WomanAlt from "../assets/people/woman_alt.png";
-import { memo } from "react";
+import { IonFabButton, IonIcon } from "@ionic/react";
+import { Suspense, lazy, memo, useState } from "react";
 
-/**
- * Renders a profile image for a user.
- * @param {Object} props - The component props.
- * @param {User|null|undefined} props.currentUser - The current user object.
- * @param {string} [props.gender] - The gender of the user. Defaults to undefined.
- * @param {string} [props.imgClassName] - The class name for the image element. Defaults to undefined.
- * @param {boolean} [props.onboarding] - Whether the component is being used in an onboarding flow. Defaults to undefined.
- * @returns {JSX.Element} - The rendered component.
- */
+import AnimatedImg from "./AnimatedImg";
+import { SystemAvatars } from "../constants";
+import { User } from "firebase/auth";
+import { cameraOutline } from "ionicons/icons";
+
+const EditProfileImage = lazy(() => import("./EditProfileImage"));
+export const DefaultProfileImg = (
+  photoURL: string | null | undefined,
+  gender?: string
+) => {
+  console.log("photoURL", photoURL);
+  if (photoURL == undefined || photoURL == null) {
+    if (gender === "Female") {
+      return SystemAvatars[3];
+    } else {
+      return SystemAvatars[1];
+    }
+  } else {
+    return {
+      path: photoURL,
+      name: "User Profile Image",
+      system: false
+    };
+  }
+};
+
+
 function ProfileImage(props: {
   currentUser: User | null | undefined;
   gender?: string;
   imgClassName?: string;
   onboarding?: boolean;
+  showEditBtn?: boolean;
 }) {
+  const profile = DefaultProfileImg(props.currentUser?.photoURL, props.gender);
+
+  const [isOpen, setIsOpen] = useState(() => false);
+  const dismiss = () => setIsOpen(false);
+
+  console.log("profile", profile);
+
   return (
-    <div>
-      {props.currentUser?.photoURL ? (
+    <div className="rounded-full my-2">
+      <div className="relative">
         <AnimatedImg
-          src={props.currentUser.photoURL}
-          className={`${!props.onboarding && "rounded-full bg-slate-200"} `}
+          src={profile.path}
+          className={`${!props.onboarding && "rounded-full bg-slate-200"} ${
+            props.imgClassName
+          }`}
         />
-      ) : (
-        <div>
-          {props.gender == "Female" ? (
-            <AnimatedImg
-              src={WomanAlt}
-              className={`${!props.onboarding && "rounded-full bg-slate-200"} ${
-                props.imgClassName
-              }`}
+        {props.showEditBtn && (
+          <IonFabButton
+            className="absolute mt-[-55px] right-0"
+            onClick={() => setIsOpen(true)}
+          >
+            <IonIcon icon={cameraOutline} />
+          </IonFabButton>
+        )}
+        {props.showEditBtn && (
+          <Suspense>
+            <EditProfileImage
+              defaultProfileImg={profile}
+              isOpen={isOpen}
+              dismiss={dismiss}
             />
-          ) : (
-            <AnimatedImg
-              src={ManAlt}
-              className={`${!props.onboarding && "rounded-full bg-slate-200"} ${
-                props.imgClassName
-              }`}
-            />
-          )}
-        </div>
-      )}
+          </Suspense>
+        )}
+      </div>
     </div>
   );
 }
 
-export default memo(ProfileImage);
+export default ProfileImage;

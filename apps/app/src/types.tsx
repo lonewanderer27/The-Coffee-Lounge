@@ -54,6 +54,7 @@ export type UserType = {
   default_address: string;
   nickname: string;
   gender?: string;
+  pronouns?: string;
   favorites?: string[];
 };
 

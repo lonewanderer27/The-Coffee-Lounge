@@ -298,3 +298,9 @@ export interface VoucherType {
   created_at: Timestamp;
   updated_at: Timestamp;
 }
+
+export interface Avatar {
+  name: string,
+  path: string,
+  system: boolean,
+}

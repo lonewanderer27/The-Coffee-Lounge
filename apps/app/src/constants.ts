@@ -6,6 +6,12 @@ import {
   VoucherType,
 } from "./types";
 
+import { Avatar } from "coffee-lounge-types";
+import Man from "../src/assets/avatars/man.png"
+import ManAlt from "../src/assets/avatars/man_alt.png"
+import Woman from "../src/assets/avatars/woman.png"
+import WomanAlt from "../src/assets/avatars/woman_alt.png"
+
 export const CardImages = [
   {
     cardType: "visa",
@@ -158,3 +164,26 @@ export const CategoryLoading: CategoryType = {
   description: "Loading...",
   altName: "Loading",
 };
+
+export const SystemAvatars: Avatar[] = [
+  {
+    name: "Man",
+    path: Man,
+    system: true
+  },
+  {
+    name: "ManAlt",
+    path: ManAlt,
+    system: true
+  },
+  {
+    name: "Woman",
+    path: Woman,
+    system: true
+  },
+  {
+    name: "WomanAlt",
+    path: WomanAlt,
+    system: true
+  }
+]

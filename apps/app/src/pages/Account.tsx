@@ -23,10 +23,10 @@ import {
 } from "@ionic/react";
 import { doc, getFirestore } from "firebase/firestore";
 
-import ManAlt from "../assets/people/man_alt.png";
+import ManAlt from "../assets/avatars/man_alt.png";
 import ProfileImage from "../components/ProfileImage";
 import { UserConvert } from "../converters/user";
-import WomanAlt from "../assets/people/woman_alt.png";
+import WomanAlt from "../assets/avatars/woman_alt.png";
 import { chevronForwardOutline } from "ionicons/icons";
 import { getAuth } from "firebase/auth";
 import { memo } from "react";

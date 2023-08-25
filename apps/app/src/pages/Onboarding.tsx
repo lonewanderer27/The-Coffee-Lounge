@@ -104,12 +104,13 @@ function Onboarding() {
   return (
     <IonPage>
       <IonContent className="ion-padding">
-        <div className="p-4">
+        <div className="p-4 pt-0">
           <ProfileImage
             currentUser={null}
             gender={watch("gender")}
             imgClassName="my-5 w-2/4 ml-[-20px]"
             onboarding
+            showEditBtn
           />
           <h6 className="font-bold">Before you start</h6>
           <p>

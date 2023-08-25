@@ -11,27 +11,19 @@ import {
   IonBackButton,
   IonButton,
   IonButtons,
-  IonCardTitle,
-  IonCol,
   IonContent,
-  IonGrid,
   IonHeader,
   IonImg,
   IonInput,
   IonPage,
   IonRouterLink,
-  IonRow,
-  IonSelect,
-  IonSelectOption,
-  IonText,
   IonTitle,
   IonToolbar,
-  isPlatform,
   useIonLoading,
   useIonRouter,
   useIonToast,
 } from "@ionic/react";
-import { SubmitHandler, useController, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -40,7 +32,6 @@ import {
 
 import { Action } from "../components/Action";
 import { useColorScheme } from "../hooks/page";
-import { useHistory } from "react-router";
 
 enum GenderEnum {
   Female = "Female",
@@ -61,7 +52,6 @@ const Register: React.FC = () => {
   const router = useIonRouter();
   const db = getFirestore();
   const auth = getAuth();
-  const history = useHistory();
 
   const {
     register,
