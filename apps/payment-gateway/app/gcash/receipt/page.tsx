@@ -54,7 +54,7 @@ export default function Receipt() {
             <span>Total</span>
             <span>₱ {amountDue}</span>
           </div>
-          {callbackUrl && (
+          {redirectUrl && (
             <>
               <div className="flex justify-between py-3 mt-3">
                 <span className="text-sm">
