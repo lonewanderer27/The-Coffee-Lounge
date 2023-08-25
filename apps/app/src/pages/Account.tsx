@@ -29,6 +29,7 @@ import { UserConvert } from "../converters/user";
 import WomanAlt from "../assets/people/woman_alt.png";
 import { chevronForwardOutline } from "ionicons/icons";
 import { getAuth } from "firebase/auth";
+import { memo } from "react";
 import { useDocument } from "react-firebase-hooks/firestore";
 
 const Account = (props: {
@@ -52,88 +53,80 @@ const Account = (props: {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <div className="ion-padding-vertical">
-          <IonHeader collapse="condense">
-            <IonToolbar>
-              <IonTitle size="large">Account</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-
-          <IonGrid className="ion-padding-horizontal">
-            <IonRow>
-              <IonCol size="4" className="ml-[-5px]">
-                <ProfileImage
-                  currentUser={currentUser}
-                  gender={userData?.get("gender")}
-                />
-              </IonCol>
-              <IonCol className="ion-padding-start flex items-center">
-                <IonText>
-                  <h2>{userData?.get("nickname")}</h2>
-                </IonText>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-          <IonList>
-            <IonListHeader>
-              <IonLabel>My Account</IonLabel>
-            </IonListHeader>
-            <IonItem routerLink="/account/accountandsecurity">
-              <IonLabel>Profile & Security</IonLabel>
-            </IonItem>
-            <IonItem routerLink="/account/delivery-addresses">
-              <IonLabel>My Addresses</IonLabel>
-            </IonItem>
-            <IonItem routerLink="/account/bankaccountscards">
-              <IonLabel>Bank Accounts / Cards</IonLabel>
-            </IonItem>
-          </IonList>
-          <IonList>
-            <IonListHeader>
-              <IonLabel>Settings</IonLabel>
-            </IonListHeader>
-            <IonItem>
-              <IonLabel>Chat Settings</IonLabel>
-              <IonIcon src={chevronForwardOutline}></IonIcon>
-            </IonItem>
-            <IonItem>
-              <IonLabel>Notification Settings</IonLabel>
-              <IonIcon src={chevronForwardOutline}></IonIcon>
-            </IonItem>
-          </IonList>
-          <IonList>
-            <IonListHeader>
-              <IonLabel>Support</IonLabel>
-            </IonListHeader>
-            <IonItem onClick={() => props.setIntro(null)}>
-              <IonLabel>About</IonLabel>
-              <IonIcon src={chevronForwardOutline}></IonIcon>
-            </IonItem>
-          </IonList>
-          <div className="ion-padding">
-            <IonButton expand="block" id="logout" className="ion-margin-top">
-              Logout
-            </IonButton>
-            <IonAlert
-              trigger="logout"
-              header="Logout"
-              message="Are you sure you want to log out?"
-              buttons={[
-                {
-                  text: "Cancel",
-                  role: "cancel",
-                },
-                {
-                  text: "Logout",
-                  handler: logout,
-                },
-              ]}
-            ></IonAlert>
-          </div>
+        <IonGrid className="ion-padding-horizontal">
+          <IonRow>
+            <IonCol size="4" className="ml-[-5px] mt-[20px]">
+              <ProfileImage
+                currentUser={currentUser}
+                gender={userData?.get("gender")}
+              />
+            </IonCol>
+            <IonCol className="ion-padding-start flex items-center">
+              <IonText>
+                <h2>{userData?.get("nickname")}</h2>
+              </IonText>
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+        <IonList>
+          <IonListHeader>
+            <IonLabel>My Account</IonLabel>
+          </IonListHeader>
+          <IonItem routerLink="/account/accountandsecurity">
+            <IonLabel>Profile & Security</IonLabel>
+          </IonItem>
+          <IonItem routerLink="/account/delivery-addresses">
+            <IonLabel>My Addresses</IonLabel>
+          </IonItem>
+          <IonItem routerLink="/account/bankaccountscards">
+            <IonLabel>Bank Accounts / Cards</IonLabel>
+          </IonItem>
+        </IonList>
+        <IonList>
+          <IonListHeader>
+            <IonLabel>Settings</IonLabel>
+          </IonListHeader>
+          <IonItem>
+            <IonLabel>Chat Settings</IonLabel>
+            <IonIcon src={chevronForwardOutline}></IonIcon>
+          </IonItem>
+          <IonItem>
+            <IonLabel>Notification Settings</IonLabel>
+            <IonIcon src={chevronForwardOutline}></IonIcon>
+          </IonItem>
+        </IonList>
+        <IonList>
+          <IonListHeader>
+            <IonLabel>Support</IonLabel>
+          </IonListHeader>
+          <IonItem onClick={() => props.setIntro(null)}>
+            <IonLabel>About</IonLabel>
+            <IonIcon src={chevronForwardOutline}></IonIcon>
+          </IonItem>
+        </IonList>
+        <div className="ion-padding">
+          <IonButton expand="block" id="logout" className="ion-margin-top">
+            Logout
+          </IonButton>
+          <IonAlert
+            trigger="logout"
+            header="Logout"
+            message="Are you sure you want to log out?"
+            buttons={[
+              {
+                text: "Cancel",
+                role: "cancel",
+              },
+              {
+                text: "Logout",
+                handler: logout,
+              },
+            ]}
+          ></IonAlert>
         </div>
       </IonContent>
     </IonPage>
   );
 };
 
-export default Account;
+export default memo(Account);

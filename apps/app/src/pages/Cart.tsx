@@ -17,18 +17,15 @@ import {
   IonTitle,
   IonToolbar,
 } from "@ionic/react";
-import { Suspense, lazy, memo } from "react";
 
 import CartItem from "../components/CartItem";
+import EmptyCart from "./Cart/EmptyCart";
+import { memo } from "react";
 import { phpString } from "../phpString";
 import { useCart } from "../hooks/cart";
 
-const EmptyCart = lazy(() => import("../pages/Cart/EmptyCart"));
-
 const Cart: React.FC = () => {
   const { cart, setCart, totalPrice, count } = useCart();
-
-  console.table(cart);
 
   return (
     <IonPage>
@@ -63,11 +60,7 @@ const Cart: React.FC = () => {
             )}
           </IonList>
         )}
-        {count === 0 && (
-          <Suspense>
-            <EmptyCart />
-          </Suspense>
-        )}
+        {count === 0 && <EmptyCart />}
       </IonContent>
       <IonFooter>
         <IonToolbar>

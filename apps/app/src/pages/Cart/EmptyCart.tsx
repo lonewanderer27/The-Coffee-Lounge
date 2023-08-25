@@ -1,6 +1,7 @@
 import CoffeeMachine from "../../assets/lotties/coffee-machine.lottie";
 import { DotLottiePlayer } from "@dotlottie/react-player";
 import { IonText } from "@ionic/react";
+import { memo } from "react";
 
 const EmptyCart = () => {
   return (
@@ -21,4 +22,4 @@ const EmptyCart = () => {
   );
 };
 
-export default EmptyCart;
+export default memo(EmptyCart);

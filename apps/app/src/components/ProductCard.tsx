@@ -10,6 +10,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 
+import AnimatedImg from "./AnimatedImg";
 import { Size } from "../types";
 import { bagAddOutline } from "ionicons/icons";
 import { memo } from "react";
@@ -53,7 +54,7 @@ function ProductCard(props: ProductType) {
         }}
       >
         <div className="bg-slate-200 dark:bg-gray-700 rounded-md p-[5px]">
-          <IonImg
+          <AnimatedImg
             className="h-[148px] w-full"
             src={props.image}
             alt={props.name}

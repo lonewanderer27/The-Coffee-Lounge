@@ -15,6 +15,7 @@ import { add, removeOutline, trashOutline } from "ionicons/icons";
 import { computeProductPrice, useCart } from "../hooks/cart";
 import { memo, useEffect, useState } from "react";
 
+import AnimatedImg from "./AnimatedImg";
 import OrderDescription from "../utils";
 import { phpString } from "../phpString";
 
@@ -71,7 +72,7 @@ function CartItem(props: CartItemType) {
         <IonGrid>
           <IonRow className="ion-align-items-center">
             <IonCol size="auto">
-              <img
+              <AnimatedImg
                 src={props.product_snapshot.image}
                 alt={props.product_snapshot.name}
                 style={{

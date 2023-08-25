@@ -20,6 +20,7 @@ import {
 import { Swiper, SwiperSlide } from "swiper/react";
 import { memo, useRef } from "react";
 
+import AnimatedImg from "../components/AnimatedImg";
 import { EffectCards } from "swiper/modules";
 
 const Explore: React.FC = () => {
@@ -43,7 +44,7 @@ const Explore: React.FC = () => {
         </IonHeader>
         <div className="ion-padding">
           <div style={{ marginBottom: "50px" }}>
-            <IonImg
+            <AnimatedImg
               src="/outdoor/TCL - PICTURE 2 (OUTSIDE).webp"
               style={{ borderRadius: "10px" }}
             />
@@ -72,7 +73,7 @@ const Explore: React.FC = () => {
                 breakfast nor bread.
               </p>
             </IonText>
-            <IonImg
+            <AnimatedImg
               src="/outdoor/the-coffee-lounge-2nd-floor-facing-from-the-outside-railing-day.webp"
               style={{ borderRadius: "10px" }}
             />
@@ -85,7 +86,7 @@ const Explore: React.FC = () => {
                 giving enough workspace to work on group projects.
               </p>
             </IonText>
-            <IonImg
+            <AnimatedImg
               src="/outdoor/TCL - Picture 1 (OUTSIDE).webp"
               style={{ borderRadius: "10px" }}
             />

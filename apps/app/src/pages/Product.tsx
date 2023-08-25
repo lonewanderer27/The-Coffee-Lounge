@@ -1,33 +1,19 @@
 import "./Product.css";
 
-import {
-  Additive,
-  Additives,
-  Ice,
-  Milk,
-  ProductConfig,
-  Size,
-  Sizes,
-  Syrup,
-} from "../types";
-import { Cup, LargeCup, MediumCup, SmallCup } from "../components/CupSizes";
+import { Additive, Ice, Milk, ProductConfig, Size, Syrup } from "../types";
 import {
   IonBackButton,
   IonBadge,
   IonButton,
   IonButtons,
-  IonCheckbox,
   IonCol,
   IonContent,
   IonFooter,
   IonHeader,
   IonIcon,
-  IonImg,
   IonInput,
   IonItem,
-  IonLabel,
   IonList,
-  IonModal,
   IonPage,
   IonRow,
   IonSegment,
@@ -43,12 +29,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { addOutline, removeOutline } from "ionicons/icons";
 import { computeProductPrice, useCart } from "../hooks/cart";
 import { doc, getFirestore } from "firebase/firestore";
-import {
-  useDocumentDataOnce,
-  useDocumentOnce,
-} from "react-firebase-hooks/firestore";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
+import AnimatedImg from "../components/AnimatedImg";
 import CartBtn from "../components/CartBtn";
 import Heart from "react-heart";
 import { ProductConvert } from "../converters/products";
@@ -57,11 +40,12 @@ import { getAuth } from "firebase/auth";
 import { phpString } from "../phpString";
 import { productIdAtom } from "../atoms/products";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import useFavorite from "../hooks/favorite";
 import { useParams } from "react-router";
 import { useRecoilValue } from "recoil";
 
-export default function ProductPage() {
+function ProductPage() {
   const db = getFirestore();
   const { product_id } = useParams<{
     product_id: string;
@@ -79,29 +63,21 @@ export default function ProductPage() {
       getOptions: {
         source: "cache",
       },
-      initialValue: ProductLoading,
     }
   );
 
-  const {
-    register,
-    setValue,
-    watch,
-    getValues,
-    formState: { isValid, isDirty },
-    reset,
-    handleSubmit,
-  } = useForm<ProductConfig>({
-    defaultValues: {
-      quantity: 1,
-      size: productData!.coffee_type ? Size.Tall : Size.None,
-      milk: Milk.None,
-      syrup: Syrup.None,
-      additives: [],
-      ice: productData!.coffee_type === "Cold Coffee" ? Ice.Normal : Ice.None,
-    },
-    mode: "all",
-  });
+  const { register, setValue, watch, getValues, reset, handleSubmit } =
+    useForm<ProductConfig>({
+      defaultValues: {
+        quantity: 1,
+        size: productData?.coffee_type ? Size.Tall : Size.None,
+        milk: Milk.None,
+        syrup: Syrup.None,
+        additives: [],
+        ice: productData?.coffee_type === "Cold Coffee" ? Ice.Normal : Ice.None,
+      },
+      mode: "all",
+    });
 
   const { addToCart, count } = useCart();
 
@@ -173,7 +149,7 @@ export default function ProductPage() {
       </IonHeader>
       <IonContent fullscreen>
         <div className="ion-padding bg-slate-200 dark:bg-slate-800">
-          <IonRow className="ion-justify-content-center relative">
+          <IonRow className="justify-center relative">
             {currentUser && (
               <Heart
                 className="absolute top-2 right-2"
@@ -193,7 +169,7 @@ export default function ProductPage() {
                 {productData.coffee_type}
               </IonBadge>
             )}
-            <IonImg
+            <AnimatedImg
               className={`${
                 productData?.description ? "mb-5" : ""
               } w-[60%] h-auto`}
@@ -400,3 +376,5 @@ export default function ProductPage() {
     </IonPage>
   );
 }
+
+export default memo(ProductPage);

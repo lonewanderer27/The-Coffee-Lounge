@@ -29,7 +29,7 @@ import {
 } from "@ionic/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { doc, getFirestore } from "firebase/firestore";
-import { lazy, useState } from "react";
+import { lazy, memo, useState } from "react";
 
 import { FirebaseError } from "firebase/app";
 import ProfileImage from "../../components/ProfileImage";
@@ -38,9 +38,7 @@ import { chevronForwardOutline } from "ionicons/icons";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocument } from "react-firebase-hooks/firestore";
 
-const Avatar = lazy(() => import("react-avatar"));
-
-export default function ProfileAndSecurity() {
+function ProfileAndSecurity() {
   const db = getFirestore();
   const auth = getAuth();
   const [data] = useAuthState(auth);
@@ -121,164 +119,156 @@ export default function ProfileAndSecurity() {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <>
-        <IonContent fullscreen className="ion-padding-bottom">
-          <IonHeader collapse="condense">
+      <IonContent fullscreen className="ion-padding-bottom">
+        <div className="ion-padding flex justify-center ion-margin-top">
+          <div className="w-2/4">
+            <ProfileImage currentUser={data} gender={userData?.get("gender")} />
+          </div>
+        </div>
+        <IonList>
+          <IonListHeader>
+            <IonLabel>Basic Information</IonLabel>
+          </IonListHeader>
+          <IonItem>
+            <IonLabel>Nickname</IonLabel>
+            <IonLabel>{userData?.get("nickname")}</IonLabel>
+          </IonItem>
+          {userData?.get("pronouns") && (
+            <IonItem>
+              <IonLabel>Pronouns</IonLabel>
+              <IonLabel>{userData?.get("pronouns")}</IonLabel>
+            </IonItem>
+          )}
+          {userData?.get("gender") && (
+            <IonItem>
+              <IonLabel>Gender</IonLabel>
+              <IonLabel>{userData?.get("gender")}</IonLabel>
+            </IonItem>
+          )}
+        </IonList>
+        <IonList>
+          <IonListHeader>
+            <IonLabel>Security</IonLabel>
+          </IonListHeader>
+          <IonItem>
+            <IonText>Email</IonText>
+            <IonText className="ms-auto">{data?.email}</IonText>
+          </IonItem>
+          <IonItem id="last-signed-in">
+            <IonLabel>Last Signed In</IonLabel>
+            <IonIcon src={chevronForwardOutline} />
+          </IonItem>
+          <IonItem id="last-signed-up">
+            <IonLabel>Signed Up</IonLabel>
+            <IonIcon src={chevronForwardOutline} />
+          </IonItem>
+          <IonItem id="forgot-password">
+            <IonLabel>Forgot Password</IonLabel>
+            <IonIcon src={chevronForwardOutline} />
+          </IonItem>
+          <IonItem onClick={() => setConfirmPassOpen(true)}>
+            <IonLabel>Change Password</IonLabel>
+            <IonIcon src={chevronForwardOutline} />
+          </IonItem>
+        </IonList>
+        <IonList>
+          <IonListHeader>
+            <IonLabel>Danger</IonLabel>
+          </IonListHeader>
+          <IonItem id="delete-my-account">
+            <IonLabel>Delete my Account</IonLabel>
+            <IonIcon src={chevronForwardOutline}></IonIcon>
+          </IonItem>
+        </IonList>
+        <IonAlert
+          trigger="last-signed-in"
+          header="Last Signed In"
+          message={data?.metadata.lastSignInTime}
+          buttons={["OK"]}
+        ></IonAlert>
+        <IonAlert
+          trigger="last-signed-up"
+          header="Signed Up"
+          message={data?.metadata.creationTime}
+          buttons={["OK"]}
+        />
+        <IonAlert
+          trigger="forgot-password"
+          header="Forgot Password"
+          message="Are you sure you want to reset your password?"
+          buttons={[
+            {
+              text: "Cancel",
+              role: "cancel",
+            },
+            {
+              text: "Confirm",
+              handler: () => {
+                handleForgotPassword();
+              },
+            },
+          ]}
+        ></IonAlert>
+        <IonAlert
+          isOpen={forgotPasswordSuccess || forgotPasswordError}
+          header="Alert"
+          message={forgotPasswordErrorMsg || forgotPasswordSuccessMsg}
+          buttons={["OK"]}
+          onDidDismiss={() => {
+            setforgotPasswordError(false);
+            setforgotPasswordSuccess(false);
+          }}
+        ></IonAlert>
+        <IonModal isOpen={confirmPassOpen}>
+          <IonHeader translucent={true}>
             <IonToolbar>
-              <IonTitle size="large">Profile & Security</IonTitle>
+              <IonTitle>Confirm Password</IonTitle>
+              <IonButtons slot="start">
+                <IonButton
+                  onClick={() => {
+                    setConfirmPassOpen(false);
+                    setConfirmPassMsg("");
+                  }}
+                >
+                  Cancel
+                </IonButton>
+              </IonButtons>
             </IonToolbar>
           </IonHeader>
-          <div className="ion-padding flex justify-center">
-            <div className="w-2/4">
-              <ProfileImage
-                currentUser={data}
-                gender={userData?.get("gender")}
+          <IonContent>
+            <form className="ion-padding" onSubmit={handleSubmit(onSubmit)}>
+              <h4>Please enter your current password</h4>
+              <IonInput
+                label="Current Password"
+                labelPlacement="floating"
+                type="password"
+                className={`${
+                  errors.currentPassword?.type ? "ion-invalid" : "ion-valid"
+                } ion-margin-top ${
+                  touchedFields.currentPassword ? "ion-touched" : ""
+                } ${confirmPassError && "ion-invalid"} `}
+                errorText={
+                  errors.currentPassword?.message ||
+                  (confirmPassError ? confirmPassMsg : "")
+                }
+                {...register("currentPassword", {
+                  required: true,
+                })}
               />
-            </div>
-          </div>
-          <IonList>
-            <IonListHeader>
-              <IonLabel>Basic Information</IonLabel>
-            </IonListHeader>
-            <IonItem>
-              <IonLabel>Nickname</IonLabel>
-              <IonLabel>{userData?.get("nickname")}</IonLabel>
-            </IonItem>
-            {userData?.get("pronouns") && (
-              <IonItem>
-                <IonLabel>Pronouns</IonLabel>
-                <IonLabel>{userData?.get("pronouns")}</IonLabel>
-              </IonItem>
-            )}
-            {userData?.get("gender") && (
-              <IonItem>
-                <IonLabel>Gender</IonLabel>
-                <IonLabel>{userData?.get("gender")}</IonLabel>
-              </IonItem>
-            )}
-          </IonList>
-          <IonList>
-            <IonListHeader>
-              <IonLabel>Security</IonLabel>
-            </IonListHeader>
-            <IonItem>
-              <IonText>Email</IonText>
-              <IonText className="ms-auto">{data?.email}</IonText>
-            </IonItem>
-            <IonItem id="last-signed-in">
-              <IonLabel>Last Signed In</IonLabel>
-              <IonIcon src={chevronForwardOutline} />
-            </IonItem>
-            <IonItem id="last-signed-up">
-              <IonLabel>Signed Up</IonLabel>
-              <IonIcon src={chevronForwardOutline} />
-            </IonItem>
-            <IonItem id="forgot-password">
-              <IonLabel>Forgot Password</IonLabel>
-              <IonIcon src={chevronForwardOutline} />
-            </IonItem>
-            <IonItem onClick={() => setConfirmPassOpen(true)}>
-              <IonLabel>Change Password</IonLabel>
-              <IonIcon src={chevronForwardOutline} />
-            </IonItem>
-          </IonList>
-          <IonList>
-            <IonListHeader>
-              <IonLabel>Danger</IonLabel>
-            </IonListHeader>
-            <IonItem id="delete-my-account">
-              <IonLabel>Delete my Account</IonLabel>
-              <IonIcon src={chevronForwardOutline}></IonIcon>
-            </IonItem>
-          </IonList>
-          <IonAlert
-            trigger="last-signed-in"
-            header="Last Signed In"
-            message={data?.metadata.lastSignInTime}
-            buttons={["OK"]}
-          ></IonAlert>
-          <IonAlert
-            trigger="last-signed-up"
-            header="Signed Up"
-            message={data?.metadata.creationTime}
-            buttons={["OK"]}
-          />
-          <IonAlert
-            trigger="forgot-password"
-            header="Forgot Password"
-            message="Are you sure you want to reset your password?"
-            buttons={[
-              {
-                text: "Cancel",
-                role: "cancel",
-              },
-              {
-                text: "Confirm",
-                handler: () => {
-                  handleForgotPassword();
-                },
-              },
-            ]}
-          ></IonAlert>
-          <IonAlert
-            isOpen={forgotPasswordSuccess || forgotPasswordError}
-            header="Alert"
-            message={forgotPasswordErrorMsg || forgotPasswordSuccessMsg}
-            buttons={["OK"]}
-            onDidDismiss={() => {
-              setforgotPasswordError(false);
-              setforgotPasswordSuccess(false);
-            }}
-          ></IonAlert>
-          <IonModal isOpen={confirmPassOpen}>
-            <IonHeader translucent={true}>
-              <IonToolbar>
-                <IonTitle>Confirm Password</IonTitle>
-                <IonButtons slot="start">
-                  <IonButton
-                    onClick={() => {
-                      setConfirmPassOpen(false);
-                      setConfirmPassMsg("");
-                    }}
-                  >
-                    Cancel
-                  </IonButton>
-                </IonButtons>
-              </IonToolbar>
-            </IonHeader>
-            <IonContent>
-              <form className="ion-padding" onSubmit={handleSubmit(onSubmit)}>
-                <h4>Please enter your current password</h4>
-                <IonInput
-                  label="Current Password"
-                  labelPlacement="floating"
-                  type="password"
-                  className={`${
-                    errors.currentPassword?.type ? "ion-invalid" : "ion-valid"
-                  } ion-margin-top ${
-                    touchedFields.currentPassword ? "ion-touched" : ""
-                  } ${confirmPassError && "ion-invalid"} `}
-                  errorText={
-                    errors.currentPassword?.message ||
-                    (confirmPassError ? confirmPassMsg : "")
-                  }
-                  {...register("currentPassword", {
-                    required: true,
-                  })}
-                />
-                <IonButton
-                  className="ion-margin-top"
-                  expand="block"
-                  type="submit"
-                  disabled={!isValid}
-                >
-                  Confirm Password
-                </IonButton>
-              </form>
-            </IonContent>
-          </IonModal>
-        </IonContent>
-      </>
+              <IonButton
+                className="ion-margin-top"
+                expand="block"
+                type="submit"
+                disabled={!isValid}
+              >
+                Confirm Password
+              </IonButton>
+            </form>
+          </IonContent>
+        </IonModal>
+      </IonContent>
     </IonPage>
   );
 }
+
+export default memo(ProfileAndSecurity);

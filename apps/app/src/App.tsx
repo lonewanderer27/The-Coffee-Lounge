@@ -33,8 +33,13 @@ import {
   starOutline,
 } from "ionicons/icons";
 
+import Home from "./pages/Home";
 import { IonReactRouter } from "@ionic/react-router";
+import Login from "./pages/Login";
+import Onboarding from "./pages/Onboarding";
 import { Preferences } from "@capacitor/preferences";
+import Register from "./pages/Register";
+import SignIn from "./pages/SignIn";
 import { getAuth } from "firebase/auth";
 import { motion } from "framer-motion";
 import { registerSW } from "virtual:pwa-register";
@@ -42,12 +47,9 @@ import { setupIonicReact } from "@ionic/react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 const PaymentMethods = lazy(() => import("./pages/Checkout/PaymentMethods"));
-const SignIn = lazy(() => import("./pages/SignIn"));
-const Login = lazy(() => import("./pages/Login"));
-const Home = lazy(() => import("./pages/Home"));
-const Onboarding = lazy(() => import("./pages/Onboarding"));
+
 const ProductPage = lazy(() => import("./pages/Product"));
-const Register = lazy(() => import("./pages/Register"));
+
 const CategoryPage = lazy(() => import("./pages/Category"));
 const Orders = lazy(() => import("./pages/Orders"));
 const Order = lazy(() => import("./pages/Order/Order"));
@@ -216,9 +218,7 @@ function App() {
                   </Route>
                 </AuthWrapper>
                 <Route exact path="/home">
-                  <Suspense>
-                    <Home />
-                  </Suspense>
+                  <Home />
                 </Route>
                 <Route exact path="/virtualVisit">
                   <Suspense>
@@ -244,14 +244,10 @@ function App() {
                   </Suspense>
                 </Route>
                 <Route exact path="/login">
-                  <Suspense>
-                    <Login />
-                  </Suspense>
+                  <Login />
                 </Route>
                 <Route path="/signin/">
-                  <Suspense>
-                    <SignIn />
-                  </Suspense>
+                  <SignIn />
                 </Route>
                 <Route exact path="/category">
                   <Suspense>
@@ -272,23 +268,23 @@ function App() {
               <IonTabBar slot="bottom">
                 <IonTabButton tab="home" href="/home">
                   <IonIcon aria-hidden="true" icon={homeOutline} />
-                  <IonLabel>Home</IonLabel>
+                  {/* <IonLabel>Home</IonLabel> */}
                 </IonTabButton>
                 <IonTabButton tab="explore" href="/explore">
                   <IonIcon aria-hidden="true" icon={starOutline} />
-                  <IonLabel>Explore</IonLabel>
+                  {/* <IonLabel>Explore</IonLabel> */}
                 </IonTabButton>
                 <IonTabButton tab="cart" href="/cart">
                   <IonIcon aria-hidden="true" icon={bagOutline} />
-                  <IonLabel>Cart</IonLabel>
+                  {/* <IonLabel>Cart</IonLabel> */}
                 </IonTabButton>
                 <IonTabButton tab="order" href="/orders">
                   <IonIcon aria-hidden="true" icon={receiptOutline} />
-                  <IonLabel>Orders</IonLabel>
+                  {/* <IonLabel>Orders</IonLabel> */}
                 </IonTabButton>
                 <IonTabButton tab="account" href="/account">
                   <IonIcon aria-hidden="true" icon={personCircleOutline} />
-                  <IonLabel>Account</IonLabel>
+                  {/* <IonLabel>Account</IonLabel> */}
                 </IonTabButton>
               </IonTabBar>
             </IonTabs>
@@ -318,11 +314,7 @@ export const AuthWrapper = ({
         "/signin?redirect=" + router.routeInfo.pathname.split("/")[1]
       );
     }
-    return (
-      <Suspense>
-        <SignIn />
-      </Suspense>
-    ) as unknown as JSX.Element;
+    return (<SignIn />) as unknown as JSX.Element;
   }
 
   return <></>;

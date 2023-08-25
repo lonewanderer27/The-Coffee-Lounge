@@ -10,7 +10,6 @@ import {
   IonGrid,
   IonHeader,
   IonIcon,
-  IonLoading,
   IonPage,
   IonRefresher,
   IonRefresherContent,
@@ -21,30 +20,31 @@ import {
   isPlatform,
   useIonRouter,
 } from "@ionic/react";
+import { Suspense, lazy, memo } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { collection, getFirestore, query, where } from "firebase/firestore";
 
+import AnimatedImg from "../components/AnimatedImg";
 import { Autoplay } from "swiper/modules";
 import CartBtn from "../components/CartBtn";
-import ProductCard from "../components/ProductCard";
 import { ProductLoading } from "../constants";
 import { categoryAtom } from "../atoms/products";
 import { chevronForwardOutline } from "ionicons/icons";
-import { get } from "react-hook-form";
 import { getAuth } from "firebase/auth";
-import { memo } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollectionDataOnce } from "react-firebase-hooks/firestore";
 import useFavorite from "../hooks/favorite";
 import { useRefresh } from "../hooks/page";
 import { useSetRecoilState } from "recoil";
+
+// import ProductCard from "../components/ProductCard";
+
+const ProductCard = lazy(() => import("../components/ProductCard"));
 
 const Home: React.FC = () => {
   const setCategory = useSetRecoilState(categoryAtom);
 
   const db = getFirestore();
   const auth = getAuth();
-  const [currentUser] = useAuthState(auth);
   const [data, loading, error, snapshot, refresh] = useCollectionDataOnce(
     collection(db, "categories").withConverter(CategoryConvert)
   );
@@ -103,7 +103,9 @@ const Home: React.FC = () => {
           <IonToolbar>
             <IonTitle size="large">Home</IonTitle>
             <IonButtons slot="end">
-              <CartBtn />
+              <Suspense>
+                <CartBtn />
+              </Suspense>
             </IonButtons>
           </IonToolbar>
         </IonHeader>
@@ -114,20 +116,20 @@ const Home: React.FC = () => {
           modules={[Autoplay]}
         >
           <SwiperSlide className="ion-padding">
-            <img
+            <AnimatedImg
               className="rounded-sm"
               src="/slides/black_coffee.webp"
               style={{ borderRadius: "10px" }}
             />
           </SwiperSlide>
           <SwiperSlide className="ion-padding">
-            <img
+            <AnimatedImg
               src="/slides/definitely_not_macchiato.webp"
               style={{ borderRadius: "10px" }}
             />
           </SwiperSlide>
           <SwiperSlide className="ion-padding">
-            <img
+            <AnimatedImg
               src="/slides/hot_chocolate.webp"
               style={{ borderRadius: "10px" }}
             />
@@ -191,17 +193,19 @@ const Home: React.FC = () => {
                       )
                       .slice(0, 2)
                       .map((product) => (
-                        <ProductCard
-                          key={product.id}
-                          image={product.image}
-                          id={product.id}
-                          category={product.category}
-                          name={product.name}
-                          price={product.price}
-                          sales={product.sales}
-                          description={product.description}
-                          coffee_type={product.coffee_type}
-                        />
+                        <Suspense>
+                          <ProductCard
+                            key={product.id}
+                            image={product.image}
+                            id={product.id}
+                            category={product.category}
+                            name={product.name}
+                            price={product.price}
+                            sales={product.sales}
+                            description={product.description}
+                            coffee_type={product.coffee_type}
+                          />
+                        </Suspense>
                       ))}
                   </IonRow>
                 </IonGrid>

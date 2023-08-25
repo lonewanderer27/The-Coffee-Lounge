@@ -10,6 +10,7 @@ import {
 } from "@ionic/react";
 import { OrderType, PaymentStatusType, ProductType } from "../../types";
 
+import AnimatedImg from "../../components/AnimatedImg";
 import { chevronForwardOutline } from "ionicons/icons";
 import { memo } from "react";
 import { orderAtom } from "../../atoms/order";
@@ -56,17 +57,9 @@ function OrderItem(props: OrderType) {
       <IonRow className="my-0 mx-2">
         {props.products.map((product) => (
           <>
-            <IonCol key={`ioncol1:${product.product_id}`} size="2">
-              <IonImg
-                key={`ionimg:${product.product_id}`}
-                alt={product.product_snapshot.name}
-                src={product.product_snapshot?.image}
-                className="h-7 w-full"
-              />
-            </IonCol>
             <IonCol
               key={`ioncol2:${product.product_id}`}
-              size="9"
+              size="11"
               className="flex items-center"
             >
               {`${product.product_snapshot.name}`}

@@ -1,10 +1,4 @@
-import {
-  DeliveryOptionType,
-  DeliveryStatusType,
-  OrderType,
-  PaymentOptionType,
-  PaymentStatusType,
-} from "../../types";
+import { DeliveryStatusType, OrderType, PaymentStatusType } from "../../types";
 import {
   IonBackButton,
   IonButton,
@@ -14,10 +8,8 @@ import {
   IonFooter,
   IonGrid,
   IonHeader,
-  IonImg,
   IonItem,
   IonList,
-  IonLoading,
   IonPage,
   IonRow,
   IonText,
@@ -28,6 +20,7 @@ import { doc, getFirestore } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 
+import AnimatedImg from "../../components/AnimatedImg";
 import { Branches } from "../../constants";
 import { OrderConvert } from "../../converters/orders";
 import OrderDescription from "../../utils";
@@ -74,7 +67,7 @@ const Data = (props: { order_id: string; orderDetails: OrderType | null }) => {
                 <IonRow>
                   <IonCol size="2">
                     <div className="bg-slate-200 dark:bg-gray-700 p-2 rounded-xl w-full">
-                      <IonImg
+                      <AnimatedImg
                         src={product.product_snapshot.image}
                         alt={product.product_snapshot.name}
                       />

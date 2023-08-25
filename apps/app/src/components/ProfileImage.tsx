@@ -1,6 +1,8 @@
+import AnimatedImg from "./AnimatedImg";
 import ManAlt from "../assets/people/man_alt.png";
 import { User } from "firebase/auth";
 import WomanAlt from "../assets/people/woman_alt.png";
+import { memo } from "react";
 
 /**
  * Renders a profile image for a user.
@@ -11,7 +13,7 @@ import WomanAlt from "../assets/people/woman_alt.png";
  * @param {boolean} [props.onboarding] - Whether the component is being used in an onboarding flow. Defaults to undefined.
  * @returns {JSX.Element} - The rendered component.
  */
-export default function ProfileImage(props: {
+function ProfileImage(props: {
   currentUser: User | null | undefined;
   gender?: string;
   imgClassName?: string;
@@ -20,21 +22,21 @@ export default function ProfileImage(props: {
   return (
     <div>
       {props.currentUser?.photoURL ? (
-        <img
+        <AnimatedImg
           src={props.currentUser.photoURL}
           className={`${!props.onboarding && "rounded-full bg-slate-200"} `}
         />
       ) : (
         <div>
           {props.gender == "Female" ? (
-            <img
+            <AnimatedImg
               src={WomanAlt}
               className={`${!props.onboarding && "rounded-full bg-slate-200"} ${
                 props.imgClassName
               }`}
             />
           ) : (
-            <img
+            <AnimatedImg
               src={ManAlt}
               className={`${!props.onboarding && "rounded-full bg-slate-200"} ${
                 props.imgClassName
@@ -46,3 +48,5 @@ export default function ProfileImage(props: {
     </div>
   );
 }
+
+export default memo(ProfileImage);

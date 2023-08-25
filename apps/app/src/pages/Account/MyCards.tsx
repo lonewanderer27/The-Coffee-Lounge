@@ -103,11 +103,6 @@ export default function MyCards() {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Cards</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         <IonList>
           <IonListHeader>
             <IonLabel>Default</IonLabel>
