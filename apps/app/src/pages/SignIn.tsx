@@ -35,9 +35,7 @@ import { emailForSignin, loginProviderAtom } from "../atoms/signin";
 import { logoGoogle, mail } from "ionicons/icons";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
-import EmailLoginButton from "../components/EmailLoginButton";
 import { FirebaseError } from "firebase/app";
-import { GoogleLoginButton } from "react-social-login-buttons";
 import { LoginProvider } from "../types";
 import Logo2 from "../assets/The Coffee Lounge - Logo 2.svg";
 import { UserConvert } from "../converters/user";
