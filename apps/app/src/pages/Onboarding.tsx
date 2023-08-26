@@ -25,7 +25,7 @@ import { FirebaseError } from "firebase/app";
 import ProfileImage from "../components/ProfileImage";
 import { UserConvert } from "../converters/user";
 import { isPlatform } from "@ionic/react";
-import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
+import { useDocument } from "react-firebase-hooks/firestore";
 
 interface IFormInput {
   nickname: string;
@@ -44,7 +44,8 @@ function Onboarding() {
     "users",
     auth.currentUser?.uid ?? "Loading"
   ).withConverter(UserConvert);
-  const [values] = useDocumentDataOnce(userRef);
+  const [values] = useDocument(userRef);
+  let userData: any;
 
   console.info(values);
 
@@ -56,12 +57,12 @@ function Onboarding() {
     formState: { isValid, isValidating },
   } = useForm<IFormInput>({
     defaultValues: async () => {
-      const res = await getDoc(userRef);
-      return (
-        res.data() ?? {
-          nickname: "",
-        }
-      );
+      userData = await getDoc(userRef);
+      return {
+        nickname: userData.get("nickname") ?? "",
+        gender: userData.get("gender") ?? "",
+        pronouns: userData.get("pronouns") ?? "",
+      };
     },
   });
   const [loading, setLoading] = useState(false);
@@ -77,7 +78,7 @@ function Onboarding() {
       });
 
       // construct the user data
-      const userData: IFormInput = {
+      const formData: IFormInput = {
         nickname: data.nickname,
         updatedAt: serverTimestamp(),
         ...(data.gender && { gender: data.gender }),
@@ -85,7 +86,11 @@ function Onboarding() {
       };
 
       // set the information in user's document
-      await setDoc(doc(db, "users", auth.currentUser!.uid), userData);
+      await setDoc(userRef, {
+        ...userData,
+        ...formData,
+        onboarded: true,
+      });
 
       // navigate to home
       setLoading(false);
@@ -101,14 +106,16 @@ function Onboarding() {
     }
   };
 
+  const currentUser = auth.currentUser;
+
   return (
     <IonPage>
       <IonContent className="ion-padding">
         <div className="p-4 pt-0">
           <ProfileImage
-            currentUser={null}
+            currentUser={currentUser}
             gender={watch("gender")}
-            imgClassName="my-5 w-2/4 ml-[-20px]"
+            imgClassName="my-5 w-2/4 ml-[-20px] rounded-full"
             onboarding
             showEditBtn
           />

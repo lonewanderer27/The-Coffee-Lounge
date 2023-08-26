@@ -44,7 +44,6 @@ const Home: React.FC = () => {
   const setCategory = useSetRecoilState(categoryAtom);
 
   const db = getFirestore();
-  const auth = getAuth();
   const [data, loading, error, snapshot, refresh] = useCollectionDataOnce(
     collection(db, "categories").withConverter(CategoryConvert)
   );
@@ -78,10 +77,6 @@ const Home: React.FC = () => {
   };
 
   const handleRefresh = useRefresh([refresh, productsRefresh]);
-
-  if (auth.currentUser != null && auth.currentUser?.displayName == null) {
-    router.push("/onboarding", "forward", "replace");
-  }
 
   return (
     <IonPage>

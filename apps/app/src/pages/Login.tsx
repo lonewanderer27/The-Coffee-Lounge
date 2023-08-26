@@ -96,18 +96,18 @@ const Login: React.FC = () => {
             </IonText>
             <IonInput
               label="Email"
-              labelPlacement="floating"
+              // labelPlacement="floating"
               type="email"
               fill="outline"
-              className="text-start mt-8"
+              className="mt-8"
               {...register("email", { required: true })}
             ></IonInput>
             <IonInput
               fill="outline"
               label="Password"
-              labelPlacement="floating"
+              // labelPlacement="floating"
               type={showPass ? "text" : "password"}
-              className="text-start mt-2"
+              className="mt-2"
               {...register("password", { required: true })}
             ></IonInput>
           </div>

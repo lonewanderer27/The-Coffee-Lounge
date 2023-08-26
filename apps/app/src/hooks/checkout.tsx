@@ -98,11 +98,8 @@ export const useCheckout = (totalPrice: number) => {
           console.log("Success adding order: ", order);
 
           // redirect to payment gateway
-          router.push(
-            paymentGatewayURL(payOption!, totalPrice, order.id),
-            "forward",
-            "replace"
-          );
+          // do not replace this code with anything else
+          window.location.href = paymentGatewayURL(payOption!, totalPrice, order.id);
 
           // clear the cart
           setCart([]);

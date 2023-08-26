@@ -50,12 +50,15 @@ export interface DeliveryAddressType extends AddressType {
 
 export type UserType = {
   id: string;
-  addresses: DeliveryAddressType[];
-  default_address: string;
-  nickname: string;
+  addresses?: DeliveryAddressType[];
+  default_address?: string;
+  nickname?: string;
   gender?: string;
   pronouns?: string;
   favorites?: string[];
+  updatedAt: Timestamp;
+  createdAt: Timestamp;
+  onboarded?: boolean;
 };
 
 export type CartItemType = {
