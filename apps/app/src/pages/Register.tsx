@@ -89,15 +89,19 @@ const Register: React.FC = () => {
         const userData: {
           createdAt: FieldValue;
           updatedAt: FieldValue;
+          onboarded: boolean;
         } = {
           createdAt: serverTimestamp(),
           updatedAt: serverTimestamp(),
+          onboarded: false
         };
 
         // create a user in users documents
         (async () => {
           await setDoc(doc(db, "users", user.uid), userData);
-          router.push("/home", "forward", "replace");
+
+          // navigate to onboarding page
+          router.push("/onboarding", "forward", "replace");
         })();
       })
       .catch((error) => {
