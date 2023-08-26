@@ -2,6 +2,6 @@
 <resources>
     <string name="app_name">The Coffee Lounge App</string>
     <string name="title_activity_main">The Coffee Lounge App</string>
-    <string name="package_name">io.ionic.starter</string>
-    <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="package_name">com.jamma.coffeelounge</string>
+    <string name="custom_url_scheme">com.jamma.coffeelounge</string>
 </resources>

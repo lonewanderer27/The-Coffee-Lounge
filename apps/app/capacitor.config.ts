@@ -2,7 +2,7 @@ import { CapacitorConfig } from '@capacitor/cli';
 import { KeyboardResize } from "@capacitor/keyboard";
 
 const config: CapacitorConfig = {
-  appId: "io.ionic.starter",
+  appId: "com.jamma.coffeelounge",
   appName: "The Coffee Lounge App",
   webDir: "dist",
   server: {

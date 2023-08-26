@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.jamma.coffeelounge;
 
 import com.getcapacitor.BridgeActivity;
 
