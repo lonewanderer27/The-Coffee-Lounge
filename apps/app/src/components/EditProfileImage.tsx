@@ -44,7 +44,7 @@ function EditProfileImage(props: {
 
     // Save it to Firebase Auth
     await updateProfile(currentUser!, {
-      photoURL: selectedAvatar.path,
+      photoURL: selectedAvatar.name,
     });
 
     // create reference to user's document

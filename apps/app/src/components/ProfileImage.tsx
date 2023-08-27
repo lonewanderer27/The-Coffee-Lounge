@@ -21,8 +21,8 @@ export const DefaultProfileImg = (
     }
   } else {
     // check if the photoURL is a system avatar
-    if (SystemAvatars.find((avatar) => avatar.path === photoURL)) {
-      return SystemAvatars.find((avatar) => avatar.path === photoURL)!;
+    if (SystemAvatars.find((avatar) => avatar.name === photoURL)) {
+      return SystemAvatars.find((avatar) => avatar.name === photoURL)!;
     }
 
     // if not, then it's a custom image from the user
