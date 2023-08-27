@@ -5,8 +5,10 @@ import {
   persistentMultipleTabManager,
 } from "firebase/firestore";
 import { ReCaptchaV3Provider, initializeAppCheck } from "firebase/app-check";
+import { getAuth, indexedDBLocalPersistence, initializeAuth } from "firebase/auth";
 
 import App from "./App";
+import { Capacitor } from "@capacitor/core";
 import { Providers } from "./Providers";
 import { createRoot } from "react-dom/client";
 import { initializeApp } from "firebase/app";
@@ -29,7 +31,7 @@ export const db = initializeFirestore(app, {
   }),
 });
 export const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider("6LfXQEonAAAAAAjWlyLuYkL040qQff7DhZVxVCip")
+  provider: new ReCaptchaV3Provider("6LfXQEonAAAAAAjWlyLuYkL040qQff7DhZVxVCip"),
 });
 
 const container = document.getElementById("root");

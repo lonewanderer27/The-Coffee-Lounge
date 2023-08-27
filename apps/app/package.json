@@ -10,6 +10,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@capacitor-firebase/authentication": "^5.1.0",
     "@capacitor/android": "5.2.1",
     "@capacitor/app": "5.0.6",
     "@capacitor/core": "5.2.1",
@@ -35,6 +36,7 @@
     "axios": "^1.4.0",
     "azure-maps-control": "3.0.0-preview.10",
     "coffee-lounge-constants": "workspace:^",
+    "cordova-plugin-buildinfo": "^4.0.0",
     "firebase": "^10.3.0",
     "framer-motion": "^10.16.1",
     "html2canvas": "^1.4.1",

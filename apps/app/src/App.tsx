@@ -33,6 +33,7 @@ import {
   starOutline,
 } from "ionicons/icons";
 
+import AppUrlListener from "./pages/AppUrlListener";
 import Home from "./pages/Home";
 import { IonReactRouter } from "@ionic/react-router";
 import Login from "./pages/Login";
@@ -132,6 +133,7 @@ function App() {
         <IonApp>
           <IonReactRouter>
             <IonTabs>
+              <AppUrlListener></AppUrlListener>
               <IonRouterOutlet>
                 <Route exact path="/virtualVisit/index.html" />
                 <AuthWrapper>

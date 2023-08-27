@@ -7,6 +7,8 @@ import {
   getRedirectResult,
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
+  signInWithCredential,
+  signInWithCustomToken,
   signInWithEmailLink,
   signInWithRedirect,
 } from "firebase/auth";
@@ -19,7 +21,6 @@ import {
   IonLabel,
   IonPage,
   IonText,
-  useIonViewWillEnter as useEffect,
   useIonAlert,
   useIonLoading,
   useIonRouter,
@@ -33,18 +34,18 @@ import {
 } from "firebase/firestore";
 import { emailForSignin, loginProviderAtom } from "../atoms/signin";
 import { logoGoogle, mail } from "ionicons/icons";
+import { memo, useEffect } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 
+import { Capacitor } from "@capacitor/core";
+import { FirebaseAuthentication } from "@capacitor-firebase/authentication";
 import { FirebaseError } from "firebase/app";
 import { LoginProvider } from "../types";
 import Logo2 from "../assets/The Coffee Lounge - Logo 2.svg";
 import { UserConvert } from "../converters/user";
-import { google_provider } from "../OAuthProviders";
-import { memo } from "react";
 
 const SignIn = () => {
   const db = getFirestore();
-  const auth = getAuth();
   const router = useIonRouter();
   const [loginProvider, setLoginProvider] = useRecoilState(loginProviderAtom);
   const [email, setEmail] = useRecoilState(emailForSignin);
@@ -54,8 +55,12 @@ const SignIn = () => {
   const handleGoogle = () => {
     (async () => {
       try {
-        const provider = google_provider;
-        await signInWithRedirect(auth, provider);
+        const res = await FirebaseAuthentication.signInWithGoogle({
+          mode: Capacitor.isNativePlatform() ? "popup" : "redirect",
+        });
+        const cred = GoogleAuthProvider.credential(res.credential?.idToken);
+        const auth = await getAuth();
+        await signInWithCredential(auth, cred);
       } catch (err: unknown) {
         const error = err as FirebaseError;
         console.log("error: ", error);
@@ -69,12 +74,20 @@ const SignIn = () => {
         loading({
           message: "Sending you magic email!",
         });
-        const actionCodeSettings = {
-          url: `${window.location.origin}/signin/complete`,
-          handleCodeInApp: true,
-        };
-
-        await sendSignInLinkToEmail(auth, email!, actionCodeSettings);
+        const res = await FirebaseAuthentication.sendSignInLinkToEmail({
+          email: email!,
+          actionCodeSettings: {
+            url: `${window.location.origin}/signin/complete`,
+            handleCodeInApp: true,
+            android: {
+              packageName: "com.jamma.coffeelounge",
+              installApp: true,
+              minimumVersion: "5",
+            },
+            dynamicLinkDomain: "thecoffeelounge.page.link",
+          },
+        });
+        console.log(res);
         setEmail(email!);
 
         dismiss();
@@ -123,12 +136,24 @@ const SignIn = () => {
   const confirmEmail = () => {
     (async () => {
       try {
-        const res = await signInWithEmailLink(
-          auth,
-          email!,
-          window.location.href
-        );
-        console.log(res);
+        // Confirm the link is a sign-in with email link.
+        const emailLink = window.location.href;
+        const { isSignInWithEmailLink } =
+          await FirebaseAuthentication.isSignInWithEmailLink({
+            emailLink,
+          });
+        if (!isSignInWithEmailLink) {
+          throw new Error("Invalid email link!");
+        }
+
+        // TODO:  If the saved email is different from what is in the link
+        //        ask the user the email again to confirm.
+
+        // The client SDK will parse the code from the link for you.
+        const cred = EmailAuthProvider.credentialWithLink(email!, emailLink);
+        const auth = getAuth();
+        const res = await signInWithCredential(auth, cred);
+
         await dismiss();
 
         setupProfile(res.user!);
@@ -191,25 +216,31 @@ const SignIn = () => {
     console.log("Location Origin: ", window.location.origin);
     const auth = getAuth();
 
-    // check what provider was used to sign in
-    getRedirectResult(auth).then((result) => {
-      switch (result?.providerId) {
-        case EmailAuthProvider.PROVIDER_ID:
-          {
-            if (isSignInWithEmailLink(auth, window.location.href)) {
-              setLoginProvider(LoginProvider.EmailOTP);
-              confirmEmail();
-            }
+    (async () => {
+      const { isSignInWithEmailLink } =
+        await FirebaseAuthentication.isSignInWithEmailLink({
+          emailLink: window.location.href,
+        });
+      if (isSignInWithEmailLink) {
+        loading({
+          message: "Signing you in...",
+        });
+        setLoginProvider(LoginProvider.EmailOTP);
+        confirmEmail();
+      } else {
+        // check what provider was used to sign in from the redirect
+        getRedirectResult(auth).then((result) => {
+          switch (result?.providerId) {
+            case GoogleAuthProvider.PROVIDER_ID:
+              {
+                setLoginProvider(LoginProvider.Google);
+                confirmGoogle(result);
+              }
+              break;
           }
-          break;
-        case GoogleAuthProvider.PROVIDER_ID:
-          {
-            setLoginProvider(LoginProvider.Google);
-            confirmGoogle(result);
-          }
-          break;
+        });
       }
-    });
+    })();
   }, []);
 
   return (
