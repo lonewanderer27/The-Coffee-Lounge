@@ -9,6 +9,7 @@ import {
 import { Avatar } from "coffee-lounge-types";
 import Man from "../src/assets/avatars/man.png"
 import ManAlt from "../src/assets/avatars/man_alt.png"
+import { SystemAvatarNames } from "coffee-lounge-types";
 import Woman from "../src/assets/avatars/woman.png"
 import WomanAlt from "../src/assets/avatars/woman_alt.png"
 
@@ -167,22 +168,22 @@ export const CategoryLoading: CategoryType = {
 
 export const SystemAvatars: Avatar[] = [
   {
-    name: "Man",
+    name: SystemAvatarNames.Man,
     path: Man,
     system: true
   },
   {
-    name: "ManAlt",
+    name: SystemAvatarNames.ManAlt,
     path: ManAlt,
     system: true
   },
   {
-    name: "Woman",
+    name: SystemAvatarNames.Woman,
     path: Woman,
     system: true
   },
   {
-    name: "WomanAlt",
+    name: SystemAvatarNames.WomanAlt,
     path: WomanAlt,
     system: true
   }

@@ -1,5 +1,5 @@
 import { IonFabButton, IonIcon } from "@ionic/react";
-import { Suspense, lazy, memo, useState } from "react";
+import { Suspense, lazy, useState } from "react";
 
 import AnimatedImg from "./AnimatedImg";
 import { SystemAvatars } from "../constants";
@@ -12,6 +12,7 @@ export const DefaultProfileImg = (
   gender?: string
 ) => {
   console.log("photoURL", photoURL);
+  // the photoURL is not yet defined, so new user
   if (photoURL == undefined || photoURL == null) {
     if (gender === "Female") {
       return SystemAvatars[3];
@@ -19,6 +20,12 @@ export const DefaultProfileImg = (
       return SystemAvatars[1];
     }
   } else {
+    // check if the photoURL is a system avatar
+    if (SystemAvatars.find((avatar) => avatar.path === photoURL)) {
+      return SystemAvatars.find((avatar) => avatar.path === photoURL)!;
+    }
+
+    // if not, then it's a custom image from the user
     return {
       path: photoURL,
       name: "User Profile Image",

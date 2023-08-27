@@ -11,13 +11,16 @@ import {
   IonSegment,
   IonSegmentButton,
   IonToolbar,
+  useIonLoading,
 } from "@ionic/react";
+import { doc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
 import { getAuth, updateProfile } from "firebase/auth";
 import { lazy, useRef, useState } from "react";
 
 import AnimatedImg from "./AnimatedImg";
 import { Avatar } from "coffee-lounge-types";
 import { SystemAvatars } from "../constants";
+import { UserConvert } from "../converters/user";
 import { closeOutline } from "ionicons/icons";
 
 const ReactAvatarEditor = lazy(() => import("react-avatar-editor"));
@@ -27,18 +30,36 @@ function EditProfileImage(props: {
   dismiss: () => void;
   defaultProfileImg: Avatar;
 }) {
+  const [loading, dismiss] = useIonLoading();
   const currentUser = getAuth().currentUser;
   const [selectedAvatar, setSelectedAvatar] = useState<Avatar>(
     props.defaultProfileImg
   );
+  const db = getFirestore();
   const handleSave = async () => {
-    // upload photo to storage
+    loading({
+      message: "Saving new profile photo...",
+    })
+    // TODO: Save user's custom image to storage
 
-    // create a reference to
-
+    // Save it to Firebase Auth
     await updateProfile(currentUser!, {
       photoURL: selectedAvatar.path,
     });
+
+    // create reference to user's document
+    const userDocRef = doc(db, "users", currentUser!.uid).withConverter(UserConvert);
+
+    // Save it to Firestore
+    updateDoc(userDocRef, {
+      profile: selectedAvatar
+    })
+    
+    // dismiss loading
+    dismiss();
+
+    // dismiss modal
+    props.dismiss();
   };
 
   console.log("Default Profile Image", props.defaultProfileImg);
@@ -54,7 +75,7 @@ function EditProfileImage(props: {
             </IonButton>
           </IonButtons>
           <IonButtons slot="end">
-            <IonButton>Save</IonButton>
+            <IonButton onClick={handleSave}>Save</IonButton>
           </IonButtons>
         </IonToolbar>
       </IonHeader>

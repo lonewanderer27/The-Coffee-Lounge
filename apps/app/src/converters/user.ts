@@ -1,4 +1,3 @@
-import { DeliveryAddressType, UserType } from "../types";
 import {
   FirestoreDataConverter,
   QueryDocumentSnapshot,
@@ -6,6 +5,9 @@ import {
   WithFieldValue,
   serverTimestamp,
 } from "firebase/firestore";
+
+import { DeliveryAddressType } from "../types";
+import { UserType } from "coffee-lounge-types";
 
 export const DeliveryAddressConvert: FirestoreDataConverter<DeliveryAddressType> =
   {

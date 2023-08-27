@@ -50,11 +50,16 @@ export interface DeliveryAddressType extends AddressType {
 
 export type UserType = {
   id: string;
-  addresses: DeliveryAddressType[];
-  default_address: string;
-  nickname: string;
+  addresses?: DeliveryAddressType[];
+  default_address?: string;
+  nickname?: string;
   gender?: string;
+  pronouns?: string;
   favorites?: string[];
+  updatedAt: Timestamp;
+  createdAt: Timestamp;
+  onboarded?: boolean;
+  profile?: Avatar;
 };
 
 export type CartItemType = {
@@ -299,8 +304,15 @@ export interface VoucherType {
   updated_at: Timestamp;
 }
 
+export enum SystemAvatarNames {
+  Man = "Man",
+  ManAlt = "ManAlt",
+  Woman = "Woman",
+  WomanAlt = "WomanAlt"
+}
+
 export interface Avatar {
-  name: string,
+  name: SystemAvatarNames | string,
   path: string,
   system: boolean,
 }
