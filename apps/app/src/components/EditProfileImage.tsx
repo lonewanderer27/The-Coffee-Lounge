@@ -40,6 +40,13 @@ function EditProfileImage(props: {
   );
   const db = getFirestore();
   const handleSave = async () => {
+    // skip if the user hasn't changed their profile image
+
+    if (selectedAvatar.name === props.defaultProfileImg.name) {
+      props.dismiss();
+      return;
+    }
+
     try {
       await loading({
         message: "Saving new profile photo...",
