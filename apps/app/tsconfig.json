@@ -14,7 +14,15 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*", "./dist/*", ""],
+      "@components/*": ["src/components/*"],
+      "@pages/*": ["src/pages/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@atoms/*": ["src/utils/*"],
+    }
   },
   "include": ["src", "node_modules/vite-plugin-pwa/client.d.ts"],
   "references": [{ "path": "./tsconfig.node.json" }]

@@ -1,11 +1,26 @@
 import { VitePWA } from "vite-plugin-pwa";
 import { defineConfig } from "vite";
 import legacy from "@vitejs/plugin-legacy";
+import mkcert from 'vite-plugin-mkcert'
+import path from "path";
 import react from "@vitejs/plugin-react";
 
 /** @type {import('vite').UserConfig} */
 export default defineConfig({
+  server: {
+    https: true
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+      components: path.resolve(__dirname, "./src/components"),
+      pages: path.resolve(__dirname, "./src/pages"),
+      hooks: path.resolve(__dirname, "./src/hooks"),
+      atoms: path.resolve(__dirname, "./src/atoms"),
+    }
+  },
   plugins: [
+    mkcert(),
     react(),
     legacy(),
     VitePWA({
