@@ -11,6 +11,7 @@ import {
   IonSegment,
   IonSegmentButton,
   IonToolbar,
+  useIonAlert,
   useIonLoading,
 } from "@ionic/react";
 import { doc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
@@ -19,6 +20,7 @@ import { lazy, useRef, useState } from "react";
 
 import AnimatedImg from "./AnimatedImg";
 import { Avatar } from "coffee-lounge-types";
+import { FirebaseError } from "firebase/app";
 import { SystemAvatars } from "../constants";
 import { UserConvert } from "../converters/user";
 import { closeOutline } from "ionicons/icons";
@@ -31,35 +33,49 @@ function EditProfileImage(props: {
   defaultProfileImg: Avatar;
 }) {
   const [loading, dismiss] = useIonLoading();
+  const [show] = useIonAlert();
   const currentUser = getAuth().currentUser;
   const [selectedAvatar, setSelectedAvatar] = useState<Avatar>(
     props.defaultProfileImg
   );
   const db = getFirestore();
   const handleSave = async () => {
-    loading({
-      message: "Saving new profile photo...",
-    })
-    // TODO: Save user's custom image to storage
+    try {
+      await loading({
+        message: "Saving new profile photo...",
+      })
+      // TODO: Save user's custom image to storage
+  
+      // Save it to Firebase Auth
+      await updateProfile(currentUser!, {
+        photoURL: selectedAvatar.name,
+      });
+  
+      // create reference to user's document
+      const userDocRef = doc(db, "users", currentUser!.uid).withConverter(UserConvert);
+  
+      // Save it to Firestore
+      updateDoc(userDocRef, {
+        profile: selectedAvatar
+      })
+      
+      // dismiss loading
+      await dismiss();
+  
+      // dismiss modal
+      props.dismiss();
+    } catch (err: unknown) {
+      const error = err as FirebaseError;
 
-    // Save it to Firebase Auth
-    await updateProfile(currentUser!, {
-      photoURL: selectedAvatar.name,
-    });
+      // dismiss loading
+      await dismiss(); 
 
-    // create reference to user's document
-    const userDocRef = doc(db, "users", currentUser!.uid).withConverter(UserConvert);
-
-    // Save it to Firestore
-    updateDoc(userDocRef, {
-      profile: selectedAvatar
-    })
-    
-    // dismiss loading
-    dismiss();
-
-    // dismiss modal
-    props.dismiss();
+      // show error alert
+      await show({
+        message: "There has been an error. Please try again.",
+        buttons: ["OK"]
+      })
+    }
   };
 
   console.log("Default Profile Image", props.defaultProfileImg);
