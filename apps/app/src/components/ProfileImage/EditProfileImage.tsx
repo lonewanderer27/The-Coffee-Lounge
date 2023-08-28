@@ -100,7 +100,7 @@ function EditProfileImage(props: {
 
     try {
       await loading({
-        message: "Saving new profile photo...",
+        message: "Saving profile photo"
       });
 
       // If the user's profile image is a system image, just save it to Firebase Auth

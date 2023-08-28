@@ -53,6 +53,7 @@ function ProfileImage(props: {
     <div className="rounded-full my-2">
       <div className="relative">
         <AnimatedImg
+          key={profile.path}
           src={profile.path}
           className={`${!props.onboarding && "rounded-full bg-slate-200"} ${
             props.imgClassName
