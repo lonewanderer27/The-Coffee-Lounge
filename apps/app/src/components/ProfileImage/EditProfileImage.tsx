@@ -1,37 +1,39 @@
 import {
   IonButton,
   IonButtons,
-  IonCol,
   IonContent,
   IonFooter,
   IonHeader,
   IonIcon,
   IonModal,
-  IonRow,
   IonSegment,
   IonSegmentButton,
   IonToolbar,
   useIonAlert,
   useIonLoading,
 } from "@ionic/react";
-import { doc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { doc, getFirestore, updateDoc } from "firebase/firestore";
 import { getAuth, updateProfile } from "firebase/auth";
-import { lazy, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
-import AnimatedImg from "./AnimatedImg";
 import { Avatar } from "coffee-lounge-types";
+import CameraBrowser from "./EditProfileImage/CameraBrowser";
 import { FirebaseError } from "firebase/app";
-import { SystemAvatars } from "../constants";
-import { UserConvert } from "../converters/user";
+import GalleryBrowser from "./EditProfileImage/GalleryBrowser";
+import { Swiper as SwiperType } from "swiper/types";
+import { UserConvert } from "../../converters/user";
 import { closeOutline } from "ionicons/icons";
-
-const ReactAvatarEditor = lazy(() => import("react-avatar-editor"));
 
 function EditProfileImage(props: {
   isOpen: boolean;
   dismiss: () => void;
   defaultProfileImg: Avatar;
 }) {
+  const [controlledSwiper, setControlledSwiper] = useState<SwiperType | null>(
+    null
+  );
+
   const [loading, dismiss] = useIonLoading();
   const [show] = useIonAlert();
   const currentUser = getAuth().currentUser;
@@ -50,38 +52,40 @@ function EditProfileImage(props: {
     try {
       await loading({
         message: "Saving new profile photo...",
-      })
+      });
       // TODO: Save user's custom image to storage
-  
+
       // Save it to Firebase Auth
       await updateProfile(currentUser!, {
         photoURL: selectedAvatar.name,
       });
-  
+
       // create reference to user's document
-      const userDocRef = doc(db, "users", currentUser!.uid).withConverter(UserConvert);
-  
+      const userDocRef = doc(db, "users", currentUser!.uid).withConverter(
+        UserConvert
+      );
+
       // Save it to Firestore
       updateDoc(userDocRef, {
-        profile: selectedAvatar
-      })
-      
+        profile: selectedAvatar,
+      });
+
       // dismiss loading
       await dismiss();
-  
+
       // dismiss modal
       props.dismiss();
     } catch (err: unknown) {
       const error = err as FirebaseError;
 
       // dismiss loading
-      await dismiss(); 
+      await dismiss();
 
       // show error alert
       await show({
         message: "There has been an error. Please try again.",
-        buttons: ["OK"]
-      })
+        buttons: ["OK"],
+      });
     }
   };
 
@@ -103,38 +107,36 @@ function EditProfileImage(props: {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <div className="w-full h-auto flex p-10 justify-center bg-slate-100">
-          {/* <div className="w-60 h-auto relative bg-slate-200">
-            <AnimatedImg className="w-max h-max" src={selectedAvatar.path} />
-          </div> */}
-          <ReactAvatarEditor image={selectedAvatar.path} borderRadius={100} />
-        </div>
-        <div className="ion-padding">
-          <IonRow>
-            {SystemAvatars.map((avatar) => (
-              <IonCol
-                key={avatar.name}
-                onClick={() => {
-                  console.log("new avatar", avatar);
-                  setSelectedAvatar(avatar);
-                }}
-              >
-                <AnimatedImg
-                  src={avatar.path}
-                  className={`${
-                    selectedAvatar.name === avatar.name && "bg-slate-200"
-                  }`}
-                />
-              </IonCol>
-            ))}
-          </IonRow>
-        </div>
+        <Swiper
+          onSwiper={setControlledSwiper}
+          watchSlidesProgress
+          onSlideChange={(e) =>
+            setActivePage(
+              e.activeIndex === 0 ? "galleryBrowser" : "cameraBrowser"
+            )
+          }
+        >
+          <SwiperSlide>
+            <GalleryBrowser
+              selectedAvatar={selectedAvatar}
+              setSelectedAvatar={setSelectedAvatar}
+            />
+          </SwiperSlide>
+          <SwiperSlide>
+            <CameraBrowser />
+          </SwiperSlide>
+        </Swiper>
       </IonContent>
       <IonFooter>
         <IonToolbar>
-          <IonSegment value="gallery">
-            <IonSegmentButton value="gallery">Gallery</IonSegmentButton>
-            <IonSegmentButton value="camera">Camera</IonSegmentButton>
+          <IonSegment
+            value={controlledSwiper?.activeIndex ?? 0}
+            onIonChange={(e) => {
+              controlledSwiper?.slideTo(e.detail.value as any);
+            }}
+          >
+            <IonSegmentButton value={0}>Gallery</IonSegmentButton>
+            <IonSegmentButton value={1}>Camera</IonSegmentButton>
           </IonSegment>
         </IonToolbar>
       </IonFooter>

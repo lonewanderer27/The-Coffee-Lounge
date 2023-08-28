@@ -6,7 +6,7 @@ import { SystemAvatars } from "../constants";
 import { User } from "firebase/auth";
 import { cameraOutline } from "ionicons/icons";
 
-const EditProfileImage = lazy(() => import("./EditProfileImage"));
+const EditProfileImage = lazy(() => import("./ProfileImage/EditProfileImage"));
 export const DefaultProfileImg = (
   photoURL: string | null | undefined,
   gender?: string
