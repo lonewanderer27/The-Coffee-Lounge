@@ -59,7 +59,6 @@ function EditProfileImage(props: {
       // Get the image from the camera
       const image = await Camera.getPhoto({
         quality: 90,
-        allowEditing: true,
         width: 2000,
         height: 2000,
         resultType: CameraResultType.Uri,

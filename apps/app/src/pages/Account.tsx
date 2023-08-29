@@ -30,7 +30,7 @@ import WomanAlt from "../assets/avatars/woman_alt.png";
 import { chevronForwardOutline } from "ionicons/icons";
 import { getAuth } from "firebase/auth";
 import { memo } from "react";
-import { useDocument } from "react-firebase-hooks/firestore";
+import { useDocumentData } from "react-firebase-hooks/firestore";
 
 const Account = (props: {
   setIntro: React.Dispatch<React.SetStateAction<boolean | null>>;
@@ -41,7 +41,7 @@ const Account = (props: {
   const auth = getAuth();
 
   const ref = doc(db, "users", currentUser!.uid).withConverter(UserConvert);
-  const [userData] = useDocument(ref);
+  const [userData] = useDocumentData(ref);
 
   const logout = () => auth.signOut().then(() => router.push("/signin"));
 
@@ -58,12 +58,12 @@ const Account = (props: {
             <IonCol size="4" className="ml-[-5px] mt-[20px]">
               <ProfileImage
                 currentUser={currentUser}
-                gender={userData?.get("gender")}
+                gender={userData?.gender}
               />
             </IonCol>
             <IonCol className="ion-padding-start flex items-center">
               <IonText>
-                <h2>{userData?.get("nickname")}</h2>
+                <h2>{userData?.nickname}</h2>
               </IonText>
             </IonCol>
           </IonRow>
