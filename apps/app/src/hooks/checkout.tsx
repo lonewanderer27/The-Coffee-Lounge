@@ -26,7 +26,7 @@ import { cartAtom } from "../atoms/cart";
 import { getAuth } from "firebase/auth";
 import { orderAtom } from "../atoms/order";
 
-const paymentGatewayURL = (
+export const paymentGatewayURL = (
   paymentOption: PaymentOptionType,
   amountDue: number,
   orderId: string

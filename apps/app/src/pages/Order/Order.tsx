@@ -24,7 +24,9 @@ import AnimatedImg from "../../components/AnimatedImg";
 import { Branches } from "../../constants";
 import { OrderConvert } from "../../converters/orders";
 import OrderDescription from "../../utils";
+import { PaymentOptionType } from "coffee-lounge-types";
 import { orderAtom } from "../../atoms/order";
+import { paymentGatewayURL } from "@/hooks/checkout";
 import { phpString } from "../../phpString";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 import { useParams } from "react-router";
@@ -36,7 +38,7 @@ const Data = (props: { order_id: string; orderDetails: OrderType | null }) => {
   const [order, loading] = useDocumentData(
     doc(db, "orders", props.order_id ?? props.orderDetails?.id).withConverter(
       OrderConvert
-    )
+    ).withConverter(OrderConvert)
   );
 
   console.log("order", order);
@@ -118,6 +120,18 @@ const Data = (props: { order_id: string; orderDetails: OrderType | null }) => {
       </IonRow>
       <IonRow className="ion-margin-top w-full">
         <IonCol size="8" className="text-right">
+          <IonText className="text-right w-full ">
+            {order?.delivery_option ?? ""}
+          </IonText>
+        </IonCol>
+        <IonCol size="4" className="text-center">
+          <IonText className="text-right w-full ">
+            {order?.branch+""}
+          </IonText>
+        </IonCol>
+      </IonRow>
+      <IonRow className="w-full">
+        <IonCol size="8" className="text-right">
           <IonText className="text-right w-full ">Payment Method</IonText>
         </IonCol>
         <IonCol size="4" className="text-center">
@@ -139,6 +153,14 @@ const Data = (props: { order_id: string; orderDetails: OrderType | null }) => {
 export default function Order() {
   const { order_id } = useParams<{ order_id: string }>();
   const order = useRecoilValue(orderAtom);
+
+  const handlePay = () => {
+    window.location.href = paymentGatewayURL(
+      order?.payment_option ?? PaymentOptionType.GCash,
+      order?.total_price ?? 0,
+      order?.id ?? ""
+    )
+  }
 
   return (
     <IonPage>
@@ -165,7 +187,7 @@ export default function Order() {
       <IonFooter>
         <IonToolbar className="p-2">
           {order?.payment_status === PaymentStatusType.Pending && (
-            <IonButton expand="block" color="primary" shape="round">
+            <IonButton expand="block" color="primary" shape="round" onClick={handlePay}>
               Pay Now
             </IonButton>
           )}
