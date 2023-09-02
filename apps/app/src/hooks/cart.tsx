@@ -95,7 +95,7 @@ export function useCart() {
   };
 
   useEffect(() => {
-    const totalPrice = cart.reduce((acc, cartItem) => {
+    let totalPrice = cart.reduce((acc, cartItem) => {
       const product = data?.docs?.find((p) => p.id === cartItem.product_id);
       if (product) {
         return (
@@ -106,6 +106,7 @@ export function useCart() {
       }
       return acc;
     }, 0);
+    totalPrice = Math.round(totalPrice);
     setTotalPrice(totalPrice);
   }, [data, cart]);
 
