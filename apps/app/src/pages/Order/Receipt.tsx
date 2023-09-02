@@ -31,10 +31,21 @@ const ReceiptItems = lazy(() => import("./ReceiptItems"));
 const QRCode = lazy(() => import("react-qr-code"));
 const Barcode = lazy(() => import("react-barcode"));
 
-function Data(props: { order: OrderType }) {
+function Receipt() {
+  const { order_id } = useParams<{ order_id: string }>();
+  console.log("order_id: ", order_id);
+
+  const db = getFirestore();
+  const orderRef = order_id
+    ? doc(db, "orders", order_id).withConverter(OrderConvert)
+    : null;
+  const [order, loading] = useDocumentDataOnce(orderRef);
+
+  console.log("order", order);
+
   const totalCount = () => {
     let count = 0;
-    props.order!.products.forEach((p) => {
+    order?.products.forEach((p) => {
       count += p.quantity;
     });
 
@@ -42,10 +53,10 @@ function Data(props: { order: OrderType }) {
     return count;
   };
 
-  const [loading, dismiss] = useIonLoading();
+  const [showLoading, dismiss] = useIonLoading();
 
   const printDocument = async () => {
-    loading({
+    showLoading({
       message: "Generating Receipt",
     });
     const input = document.getElementById("receipt");
@@ -64,7 +75,7 @@ function Data(props: { order: OrderType }) {
 
     pdf.addImage(canvas, "SVG", 0, 0, inputWidth, inputHeight);
 
-    pdf.save(`receipt_${props.order.id}.pdf`);
+    pdf.save(`receipt_${order!.id}.pdf`);
 
     dismiss();
   };
@@ -76,7 +87,7 @@ function Data(props: { order: OrderType }) {
           <IonTitle>Order Receipt</IonTitle>
           <IonButtons slot="start">
             <IonBackButton
-              defaultHref={`/orders/${props.order?.id}`}
+              defaultHref={`/orders/${order?.id}`}
             ></IonBackButton>
           </IonButtons>
           <IonButtons slot="end">
@@ -112,7 +123,7 @@ function Data(props: { order: OrderType }) {
               </IonCol>
               <IonCol>
                 <IonText color="#555555">
-                  <span>{props.order?.id}</span>
+                  <span>{order?.id}</span>
                 </IonText>
               </IonCol>
             </IonRow>
@@ -124,9 +135,9 @@ function Data(props: { order: OrderType }) {
               </IonCol>
               <IonCol className="ion-text-end">
                 <IonText color="#555555">
-                  <span>
-                    {new Date(props.order!.payment_at!.toDate()).toDateString()}
-                  </span>
+                  {order?.payment_at && <span>
+                    {new Date(order!.payment_at!.toDate()).toDateString()}
+                  </span>}
                 </IonText>
               </IonCol>
             </IonRow>
@@ -138,11 +149,11 @@ function Data(props: { order: OrderType }) {
               </IonCol>
               <IonCol className="ion-text-end">
                 <IonText color="#555555">
-                  <span>
+                  {order?.payment_at && <span>
                     {new Date(
-                      props.order!.payment_at!.toDate()
+                      order!.payment_at!.toDate()
                     ).toLocaleTimeString()}
-                  </span>
+                  </span>}
                 </IonText>
               </IonCol>
             </IonRow>
@@ -154,7 +165,7 @@ function Data(props: { order: OrderType }) {
                 </IonText>
               </IonCol>
             </IonRow>
-            {props.order?.products.map(
+            {order?.products.map(
               (product: CartItemType, index: number) => (
                 <ReceiptItems
                   key={"order:" + product.product_id + index}
@@ -182,7 +193,7 @@ function Data(props: { order: OrderType }) {
               </IonCol>
               <IonCol className="ion-text-end">
                 <IonText color="#555555">
-                  {phpString.format(props.order!.total_price)}
+                  {phpString.format(order?.total_price ?? 0)}
                 </IonText>
               </IonCol>
             </IonRow>
@@ -194,31 +205,31 @@ function Data(props: { order: OrderType }) {
               </IonCol>
               <IonCol className="ion-text-end">
                 <IonText color="#555555">
-                  <span>{props.order?.payment_option}</span>
+                  <span>{order?.payment_option}</span>
                 </IonText>
               </IonCol>
             </IonRow>
             <IonRow>
               <IonCol className="ion-text-start">
                 <IonText color="#555555">
-                  {props.order?.delivery_option}
+                  {order?.delivery_option}
                 </IonText>
               </IonCol>
               <IonCol className="ion-text-end">
                 <IonText color="#555555">
-                  {props.order?.branch+""}
+                  {order?.branch+""}
                 </IonText>
               </IonCol>
             </IonRow>
 
             <IonRow className="ion-margin-top ion-no-padding">
               <Suspense>
-                <Barcode value={props.order?.id!} />
+                <Barcode value={order?.id! ?? ""} />
               </Suspense>
             </IonRow>
             <IonRow className="ion-margin-top ion-padding w-full flex justify-center">
               <Suspense>
-                <QRCode value={props.order?.id!} style={{
+                <QRCode value={order?.id ?? ""} style={{
                   maxWidth: "70%"
                 }} />
               </Suspense>
@@ -227,30 +238,7 @@ function Data(props: { order: OrderType }) {
         </div>
       </IonContent>
     </IonPage>
-  );
-}
-
-function Receipt() {
-  const { order_id } = useParams<{ order_id: string }>();
-  console.log("order_id: ", order_id);
-
-  const db = getFirestore();
-  const orderRef = order_id
-    ? doc(db, "orders", order_id).withConverter(OrderConvert)
-    : null;
-  const [order, loading] = useDocumentDataOnce(orderRef);
-
-  console.log("order", order);
-
-  if (!order) {
-    return <></>;
-  } else {
-    return (
-      <IonPage>
-        <Data order={order!} />
-      </IonPage>
-    );
-  }
+  )
 }
 
 export default memo(Receipt);
