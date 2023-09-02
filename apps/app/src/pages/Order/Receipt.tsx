@@ -80,7 +80,7 @@ function Data(props: { order: OrderType }) {
       message: "Generating Receipt",
     });
     const input = document.getElementById("receipt");
-    html2canvas(input!, { backgroundColor: null, scale: 4 }).then((canvas) => {
+    html2canvas(input!, { backgroundColor: "white", scale: 4 }).then((canvas) => {
       const inputWidth = input!.offsetWidth;
       const inputHeight = input!.offsetHeight;
 
@@ -146,7 +146,7 @@ function Data(props: { order: OrderType }) {
       <div className="flex h-100 justify-center items-center w-100">
         <div
           id="receipt"
-          className="rounded-tl-lg rounded-tr-lg border-4 border-slate-700 w-full text-center ion-padding"
+          className="rounded-tl-lg rounded-tr-lg border-4 border-slate-700 w-full text-center ion-padding h-100"
         >
           <IonRow className="text-center">
             <IonCol size="12" className="text-center">
@@ -260,9 +260,11 @@ function Data(props: { order: OrderType }) {
                 <Barcode value={props.order?.id!} />
               </Suspense>
             </IonRow>
-            <IonRow className="ion-margin-top ion-no-padding w-full">
+            <IonRow className="ion-margin-top ion-padding w-full flex justify-center">
               <Suspense>
-                <QRCode value={props.order?.id!} className="mx-auto" />
+                <QRCode value={props.order?.id!} style={{
+                  maxWidth: "70%"
+                }} />
               </Suspense>
             </IonRow>
           </IonGrid>
