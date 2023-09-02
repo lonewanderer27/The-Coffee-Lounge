@@ -71,6 +71,7 @@ function ProfileAndSecurity() {
       });
   };
 
+  console.log("authData", data);
   console.log("userData", userData);
 
   const {
@@ -108,6 +109,15 @@ function ProfileAndSecurity() {
         setConfirmPassMsg(error.message);
       });
   };
+
+  const showPasswordUtils = () => {
+    // find if user has password
+    if (data?.providerData.find((provider) => provider.providerId === "password")) {
+      return true
+    } else {
+      return false
+    }
+  }
 
   return (
     <IonPage>
@@ -162,6 +172,7 @@ function ProfileAndSecurity() {
             <IonLabel>Signed Up</IonLabel>
             <IonIcon src={chevronForwardOutline} />
           </IonItem>
+          {showPasswordUtils() && <>
           <IonItem id="forgot-password">
             <IonLabel>Forgot Password</IonLabel>
             <IonIcon src={chevronForwardOutline} />
@@ -170,6 +181,7 @@ function ProfileAndSecurity() {
             <IonLabel>Change Password</IonLabel>
             <IonIcon src={chevronForwardOutline} />
           </IonItem>
+          </>}
         </IonList>
         <IonList>
           <IonListHeader>
