@@ -44,90 +44,33 @@ function Data(props: { order: OrderType }) {
 
   const [loading, dismiss] = useIonLoading();
 
-  // const { isLoading, error, data, refetch } = useQuery({
-  //   queryKey: [`receipt_${props.order.id}`],
-  //   queryFn: async () => {
-  //     try {
-  //       // get app check token
-  //       console.log("getting appCheckToken");
-  //       const appCheckTokenResponse = await getToken(appCheck);
-  //       console.log("appCheckTokenResponse", appCheckTokenResponse);
-
-  //       console.log("getting receipt");
-  //       // get receipt by post request
-  //       const res = await axios.get(
-  //         `${import.meta.env.VITE_BACKEND_URL}/api/receipt/${props.order.id}`,
-  //         {
-  //           headers: {
-  //             "X-Firebase-AppCheck": appCheckTokenResponse.token,
-  //           },
-  //         }
-  //       );
-  //       console.log(res);
-
-  //       return res;
-  //     } catch (e) {
-  //       console.log("Error getting appCheck token");
-  //       console.log(e);
-  //     }
-  //   },
-  //   cacheTime: 0,
-  //   enabled: false,
-  // });
-
-  const printDocument = () => {
+  const printDocument = async () => {
     loading({
       message: "Generating Receipt",
     });
     const input = document.getElementById("receipt");
-    html2canvas(input!, { backgroundColor: "white", scale: 4 }).then((canvas) => {
-      const inputWidth = input!.offsetWidth;
-      const inputHeight = input!.offsetHeight;
+    const canvas = await html2canvas(input!, { backgroundColor: "white", scale: 4 });
+    const inputWidth = input!.offsetWidth;
+    const inputHeight = input!.offsetHeight;
 
-      const orientation = inputWidth >= inputHeight ? "l" : "p";
+    const orientation = inputWidth >= inputHeight ? "l" : "p";
 
-      // const imgData = canvas.toDataURL("image/png");
-
-      const pdf = new jsPDF({
-        orientation,
-        unit: "px",
-      });
-      pdf.internal.pageSize.width = inputWidth;
-      pdf.internal.pageSize.height = inputHeight;
-
-      pdf.addImage(canvas, "SVG", 0, 0, inputWidth, inputHeight);
-
-      pdf.save(`receipt_${props.order.id}.pdf`);
-
-      dismiss();
+    const pdf = new jsPDF({
+      orientation,
+      unit: "px",
     });
+    pdf.internal.pageSize.width = inputWidth;
+    pdf.internal.pageSize.height = inputHeight;
 
-    // loading({
-    //   message: "Generating Receipt",
-    // });
-    // refetch()
-    //   .then(() => {
-    //     dismiss();
+    pdf.addImage(canvas, "SVG", 0, 0, inputWidth, inputHeight);
 
-    //     const file = new Blob([data!.data], {
-    //       type: "application/pdf",
-    //     });
+    pdf.save(`receipt_${props.order.id}.pdf`);
 
-    //     //Build a URL from the file
-    //     const fileURL = URL.createObjectURL(file);
-    //     console.log("fileURL: ", fileURL);
-
-    //     //Open the URL on new Window
-    //     window.open(fileURL);
-    //   })
-    //   .catch((e) => {
-    //     console.log("Error getting receipt");
-    //     console.log(e);
-    //   });
+    dismiss();
   };
 
   return (
-    <IonContent>
+    <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Order Receipt</IonTitle>
@@ -143,14 +86,14 @@ function Data(props: { order: OrderType }) {
           </IonButtons>
         </IonToolbar>
       </IonHeader>
-      <div className="flex h-100 justify-center items-center w-100">
+      <IonContent>
         <div
           id="receipt"
-          className="rounded-tl-lg rounded-tr-lg border-4 border-slate-700 w-full text-center ion-padding h-100"
+          className="rounded-tl-lg rounded-tr-lg border-4 border-slate-700 w-full text-center ion-padding"
         >
           <IonRow className="text-center">
             <IonCol size="12" className="text-center">
-              <IonImg src="/logo.png" className="w-20 h-auto mx-auto" />
+              <IonImg src="/slogan_dark_mode.png" className="w-20 h-auto mx-auto" />
             </IonCol>
           </IonRow>
           <IonText className="font-bold">
@@ -224,7 +167,7 @@ function Data(props: { order: OrderType }) {
                 <IonText>Total Items</IonText>
               </IonCol>
               <IonCol size="6" className="text-right">
-                <IonText className="ml-auto">{totalCount()}</IonText>
+                <IonText className="ml-auto">x {totalCount()}</IonText>
               </IonCol>
             </IonRow>
 
@@ -255,6 +198,19 @@ function Data(props: { order: OrderType }) {
                 </IonText>
               </IonCol>
             </IonRow>
+            <IonRow>
+              <IonCol className="ion-text-start">
+                <IonText color="#555555">
+                  {props.order?.delivery_option}
+                </IonText>
+              </IonCol>
+              <IonCol className="ion-text-end">
+                <IonText color="#555555">
+                  {props.order?.branch+""}
+                </IonText>
+              </IonCol>
+            </IonRow>
+
             <IonRow className="ion-margin-top ion-no-padding">
               <Suspense>
                 <Barcode value={props.order?.id!} />
@@ -269,8 +225,8 @@ function Data(props: { order: OrderType }) {
             </IonRow>
           </IonGrid>
         </div>
-      </div>
-    </IonContent>
+      </IonContent>
+    </IonPage>
   );
 }
 
