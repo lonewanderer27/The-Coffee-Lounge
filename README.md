@@ -8,10 +8,10 @@ This Turborepo includes the following packages/apps:
 
 ### Apps and Packages
 
-- `app`: a [Ionic React](https://ionicframework.com/) app
+- `app`: an [Ionic React](https://ionicframework.com/) app
 - `web`: a [Next.js](https://nextjs.org/) app
 - `types`: a stub typescript types shared by both `app` and `web` applications
-- `payment-gateway`: a [Next.js] app 
+- `payment-gateway`: a [Next.js](https://nextjs.org/) app 
 - `eslint-config-custom`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `tsconfig`: `tsconfig.json` used throughout the monorepo
 
@@ -30,7 +30,7 @@ This Turborepo has some additional tools already setup for you:
 To build all apps and packages, run the following command:
 
 ```
-cd my-turborepo
+cd the-coffee-lounge
 pnpm build
 ```
 
