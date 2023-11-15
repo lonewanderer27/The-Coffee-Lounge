@@ -18,7 +18,7 @@ import {
 } from "@ionic/react";
 import { Suspense, lazy, memo, useEffect, useState } from "react";
 import { doc, getFirestore } from "firebase/firestore";
-import { fetchAndActivate, getValue } from "firebase/remote-config";
+import { fetchConfig, getValue } from "firebase/remote-config";
 
 import { OrderConvert } from "../../converters/orders";
 import { downloadOutline } from "ionicons/icons";
@@ -34,6 +34,7 @@ const QRCode = lazy(() => import("react-qr-code"));
 const Barcode = lazy(() => import("react-barcode"));
 
 function Receipt() {
+  const [enableCtf, setEnableCtf] = useState<boolean>(false);
   const [ctf_code, set_ctf_code] = useState<string>();
   const { order_id } = useParams<{ order_id: string }>();
   console.log("order_id: ", order_id);
@@ -63,7 +64,10 @@ function Receipt() {
       message: "Generating Receipt",
     });
     const input = document.getElementById("receipt");
-    const canvas = await html2canvas(input!, { backgroundColor: "white", scale: 4 });
+    const canvas = await html2canvas(input!, {
+      backgroundColor: "white",
+      scale: 4,
+    });
     const inputWidth = input!.offsetWidth;
     const inputHeight = input!.offsetHeight;
 
@@ -84,9 +88,23 @@ function Receipt() {
   };
 
   useEffect(() => {
-    const val = getValue(remoteConfig, "CTF_CODE_2")
-    set_ctf_code(val.asString());
-  }, [])
+    (async () => {
+      // fetch config
+      await fetchConfig(remoteConfig);
+
+      // fetch ctf code
+      const val = getValue(remoteConfig, "CTF_CODE_2");
+      console.log("CTF_CODE_2: ", val.asString());
+
+      // enable ctf mode if the code is found!
+      if (val.asString() !== "") {
+        setEnableCtf(true);
+      }
+
+      // set ctf code
+      set_ctf_code(val.asString());
+    })();
+  }, []);
 
   return (
     <IonPage>
@@ -94,9 +112,7 @@ function Receipt() {
         <IonToolbar>
           <IonTitle>Order Receipt</IonTitle>
           <IonButtons slot="start">
-            <IonBackButton
-              defaultHref={`/orders/${order?.id}`}
-            ></IonBackButton>
+            <IonBackButton defaultHref={`/orders/${order?.id}`}></IonBackButton>
           </IonButtons>
           <IonButtons slot="end">
             <IonButton onClick={() => printDocument()}>
@@ -112,7 +128,10 @@ function Receipt() {
         >
           <IonRow className="text-center">
             <IonCol size="12" className="text-center">
-              <IonImg src="/slogan_dark_mode.png" className="w-20 h-auto mx-auto" />
+              <IonImg
+                src="/slogan_dark_mode.png"
+                className="w-20 h-auto mx-auto"
+              />
             </IonCol>
           </IonRow>
           <IonText className="font-bold">
@@ -143,9 +162,11 @@ function Receipt() {
               </IonCol>
               <IonCol className="ion-text-end">
                 <IonText color="#555555">
-                  {order?.payment_at && <span>
-                    {new Date(order!.payment_at!.toDate()).toDateString()}
-                  </span>}
+                  {order?.payment_at && (
+                    <span>
+                      {new Date(order!.payment_at!.toDate()).toDateString()}
+                    </span>
+                  )}
                 </IonText>
               </IonCol>
             </IonRow>
@@ -157,11 +178,13 @@ function Receipt() {
               </IonCol>
               <IonCol className="ion-text-end">
                 <IonText color="#555555">
-                  {order?.payment_at && <span>
-                    {new Date(
-                      order!.payment_at!.toDate()
-                    ).toLocaleTimeString()}
-                  </span>}
+                  {order?.payment_at && (
+                    <span>
+                      {new Date(
+                        order!.payment_at!.toDate()
+                      ).toLocaleTimeString()}
+                    </span>
+                  )}
                 </IonText>
               </IonCol>
             </IonRow>
@@ -173,14 +196,12 @@ function Receipt() {
                 </IonText>
               </IonCol>
             </IonRow>
-            {order?.products.map(
-              (product: CartItemType, index: number) => (
-                <ReceiptItems
-                  key={"order:" + product.product_id + index}
-                  {...product}
-                />
-              )
-            )}
+            {order?.products.map((product: CartItemType, index: number) => (
+              <ReceiptItems
+                key={"order:" + product.product_id + index}
+                {...product}
+              />
+            ))}
             <IonRow className="ion-margin-vertical">
               <IonCol size="6" className="text-left">
                 <IonText>Total Items</IonText>
@@ -219,34 +240,43 @@ function Receipt() {
             </IonRow>
             <IonRow>
               <IonCol className="ion-text-start">
-                <IonText color="#555555">
-                  {order?.delivery_option}
-                </IonText>
+                <IonText color="#555555">{order?.delivery_option}</IonText>
               </IonCol>
               <IonCol className="ion-text-end">
-                <IonText color="#555555">
-                  {order?.branch+""}
-                </IonText>
+                <IonText color="#555555">{order?.branch + ""}</IonText>
               </IonCol>
             </IonRow>
 
             <IonRow className="ion-margin-top ion-no-padding">
-              <Suspense> 
-                <Barcode value={ctf_code ?? order?.id!} />
+              <Suspense>
+                <Barcode
+                  value={enableCtf === true ? ctf_code ?? "" : order?.id! ?? ""}
+                  displayValue={enableCtf === true ? false : true}
+                />
+                {enableCtf === true && (
+                  <>
+                    <span className="text-center w-full">
+                      {order?.id ?? ""}
+                    </span>
+                  </>
+                )}
               </Suspense>
             </IonRow>
             <IonRow className="ion-margin-top ion-padding w-full flex justify-center">
               <Suspense>
-                <QRCode value={order?.id ?? ""} style={{
-                  maxWidth: "70%"
-                }} />
+                <QRCode
+                  value={order?.id ?? ""}
+                  style={{
+                    maxWidth: "70%",
+                  }}
+                />
               </Suspense>
             </IonRow>
           </IonGrid>
         </div>
       </IonContent>
     </IonPage>
-  )
+  );
 }
 
 export default memo(Receipt);
