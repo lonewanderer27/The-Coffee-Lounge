@@ -94,15 +94,12 @@ function Receipt() {
 
       // fetch ctf code
       const val = getValue(remoteConfig, "CTF_CODE_2");
-      console.log("CTF_CODE_2: ", val.asString());
 
       // enable ctf mode if the code is found!
       if (val.asString() !== "") {
         setEnableCtf(true);
+        set_ctf_code(val.asString());
       }
-
-      // set ctf code
-      set_ctf_code(val.asString());
     })();
   }, []);
 
