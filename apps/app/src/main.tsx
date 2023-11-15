@@ -6,6 +6,7 @@ import {
 } from "firebase/firestore";
 import { ReCaptchaV3Provider, initializeAppCheck } from "firebase/app-check";
 import { getAuth, indexedDBLocalPersistence, initializeAuth } from "firebase/auth";
+import { getRemoteConfig } from "firebase/remote-config";
 
 import App from "./App";
 import { Capacitor } from "@capacitor/core";
@@ -33,6 +34,15 @@ export const db = initializeFirestore(app, {
 export const appCheck = initializeAppCheck(app, {
   provider: new ReCaptchaV3Provider("6LfXQEonAAAAAAjWlyLuYkL040qQff7DhZVxVCip"),
 });
+export const remoteConfig = getRemoteConfig(app);
+
+if (Capacitor.isNativePlatform()) {
+  initializeAuth(app, {
+    persistence: indexedDBLocalPersistence,
+  })
+} else {
+  getAuth(app);
+}
 
 const container = document.getElementById("root");
 const root = createRoot(container!);

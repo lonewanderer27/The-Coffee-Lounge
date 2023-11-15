@@ -16,8 +16,9 @@ import {
   IonToolbar,
   useIonLoading,
 } from "@ionic/react";
-import { Suspense, lazy, memo } from "react";
+import { Suspense, lazy, memo, useEffect, useState } from "react";
 import { doc, getFirestore } from "firebase/firestore";
+import { fetchAndActivate, getValue } from "firebase/remote-config";
 
 import { OrderConvert } from "../../converters/orders";
 import { downloadOutline } from "ionicons/icons";
@@ -26,12 +27,14 @@ import jsPDF from "jspdf";
 import { phpString } from "../../phpString";
 import { useDocumentDataOnce } from "react-firebase-hooks/firestore";
 import { useParams } from "react-router";
+import { remoteConfig } from "@/main";
 
 const ReceiptItems = lazy(() => import("./ReceiptItems"));
 const QRCode = lazy(() => import("react-qr-code"));
 const Barcode = lazy(() => import("react-barcode"));
 
 function Receipt() {
+  const [ctf_code, set_ctf_code] = useState<string>();
   const { order_id } = useParams<{ order_id: string }>();
   console.log("order_id: ", order_id);
 
@@ -79,6 +82,11 @@ function Receipt() {
 
     dismiss();
   };
+
+  useEffect(() => {
+    const val = getValue(remoteConfig, "CTF_CODE_2")
+    set_ctf_code(val.asString());
+  }, [])
 
   return (
     <IonPage>
@@ -224,7 +232,7 @@ function Receipt() {
 
             <IonRow className="ion-margin-top ion-no-padding">
               <Suspense>
-                <Barcode value={order?.id! ?? ""} />
+                <Barcode value={order?.id! ?? ctf_code} />
               </Suspense>
             </IonRow>
             <IonRow className="ion-margin-top ion-padding w-full flex justify-center">
