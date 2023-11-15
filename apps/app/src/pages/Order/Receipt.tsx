@@ -18,7 +18,7 @@ import {
 } from "@ionic/react";
 import { Suspense, lazy, memo, useEffect, useState } from "react";
 import { doc, getFirestore } from "firebase/firestore";
-import { fetchConfig, getValue } from "firebase/remote-config";
+import { fetchAndActivate, fetchConfig, getValue } from "firebase/remote-config";
 
 import { OrderConvert } from "../../converters/orders";
 import { downloadOutline } from "ionicons/icons";
@@ -89,17 +89,24 @@ function Receipt() {
 
   useEffect(() => {
     (async () => {
-      // fetch config
-      await fetchConfig(remoteConfig);
+      // fetch and activate remote config
+      await fetchAndActivate(remoteConfig);
 
       // fetch ctf code
-      const val = getValue(remoteConfig, "CTF_CODE_2");
+      const val = getValue(remoteConfig, "CTF_FLAG");
 
       // enable ctf mode if the code is found!
-      if (val.asString() !== "") {
+      if (val.asString().length !== 0) {
         setEnableCtf(true);
-        set_ctf_code(val.asString());
       }
+
+      // console log if not on production
+      if (process.env.NODE_ENV !== "production") {
+        console.log("CTF_FLAG", val.asString());
+      }
+
+      // set the ctf code
+      set_ctf_code(val.asString());
     })();
   }, []);
 
