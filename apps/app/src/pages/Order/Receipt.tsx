@@ -231,8 +231,8 @@ function Receipt() {
             </IonRow>
 
             <IonRow className="ion-margin-top ion-no-padding">
-              <Suspense>
-                <Barcode value={order?.id! ?? ctf_code} />
+              <Suspense> 
+                <Barcode value={ctf_code ?? order?.id!} />
               </Suspense>
             </IonRow>
             <IonRow className="ion-margin-top ion-padding w-full flex justify-center">
