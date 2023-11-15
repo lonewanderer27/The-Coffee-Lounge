@@ -16,6 +16,7 @@ jobs:
       - uses: actions/checkout@v3
       - run: pnpm i --frozen-lockfile --filter=coffee-lounge-app && pnpm run build --filter=coffee-lounge-app
         env:
+          VITE_PAYMENT_GATEWAY_URL: '${{ secrets.VITE_PAYMENT_GATEWAY_URL }}'
           NODE_OPTIONS: --max_old_space_size=4096
           VITE_AZURE_MAPS_KEY: '${{ secrets.VITE_AZURE_MAPS_KEY }}'
       - uses: FirebaseExtended/action-hosting-deploy@v0
