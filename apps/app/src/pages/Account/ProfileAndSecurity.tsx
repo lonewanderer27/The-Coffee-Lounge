@@ -35,6 +35,7 @@ import { FirebaseError } from "firebase/app";
 import ProfileImage from "../../components/ProfileImage";
 import { UserConvert } from "../../converters/user";
 import { chevronForwardOutline } from "ionicons/icons";
+import dayjs from "dayjs";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useDocumentData } from "react-firebase-hooks/firestore";
 
@@ -166,21 +167,23 @@ function ProfileAndSecurity() {
           </IonItem>
           <IonItem id="last-signed-in">
             <IonLabel>Last Signed In</IonLabel>
-            <IonIcon src={chevronForwardOutline} />
+            {/* <IonIcon src={chevronForwardOutline} /> */}
+            <IonText className="ms-auto">{dayjs().to(dayjs(data?.metadata.lastSignInTime))}</IonText>
           </IonItem>
           <IonItem id="last-signed-up">
             <IonLabel>Signed Up</IonLabel>
-            <IonIcon src={chevronForwardOutline} />
+            {/* <IonIcon src={chevronForwardOutline} /> */}
+            <IonText className="ms-auto">{dayjs().to(dayjs(data?.metadata.creationTime))}</IonText>
           </IonItem>
           {showPasswordUtils() && <>
-          <IonItem id="forgot-password">
-            <IonLabel>Forgot Password</IonLabel>
-            <IonIcon src={chevronForwardOutline} />
-          </IonItem>
-          <IonItem onClick={() => setConfirmPassOpen(true)}>
-            <IonLabel>Change Password</IonLabel>
-            <IonIcon src={chevronForwardOutline} />
-          </IonItem>
+            <IonItem id="forgot-password">
+              <IonLabel>Forgot Password</IonLabel>
+              <IonIcon src={chevronForwardOutline} />
+            </IonItem>
+            <IonItem onClick={() => setConfirmPassOpen(true)}>
+              <IonLabel>Change Password</IonLabel>
+              <IonIcon src={chevronForwardOutline} />
+            </IonItem>
           </>}
         </IonList>
         <IonList>
@@ -254,11 +257,9 @@ function ProfileAndSecurity() {
                 label="Current Password"
                 labelPlacement="floating"
                 type="password"
-                className={`${
-                  errors.currentPassword?.type ? "ion-invalid" : "ion-valid"
-                } ion-margin-top ${
-                  touchedFields.currentPassword ? "ion-touched" : ""
-                } ${confirmPassError && "ion-invalid"} `}
+                className={`${errors.currentPassword?.type ? "ion-invalid" : "ion-valid"
+                  } ion-margin-top ${touchedFields.currentPassword ? "ion-touched" : ""
+                  } ${confirmPassError && "ion-invalid"} `}
                 errorText={
                   errors.currentPassword?.message ||
                   (confirmPassError ? confirmPassMsg : "")

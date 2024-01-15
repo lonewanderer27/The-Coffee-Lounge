@@ -41,9 +41,11 @@ import Onboarding from "./pages/Onboarding";
 import { Preferences } from "@capacitor/preferences";
 import Register from "./pages/Register";
 import SignIn from "./pages/SignIn";
+import dayjs from "dayjs";
 import { getAuth } from "firebase/auth";
 import { motion } from "framer-motion";
 import { registerSW } from "virtual:pwa-register";
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { setupIonicReact } from "@ionic/react";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -74,6 +76,9 @@ const MyCards = lazy(() => import("./pages/Account/MyCards"));
 const Intro = lazy(() => import("./pages/Intro"));
 const About = lazy(() => import("./pages/About"));
 const PaymentSuccess = lazy(() => import("./pages/Order/PaymentSuccess"));
+
+// Setup DayJS with relative time plugin
+dayjs.extend(relativeTime)
 
 setupIonicReact();
 
