@@ -44,7 +44,6 @@ import SignIn from "./pages/SignIn";
 import dayjs from "dayjs";
 import { getAuth } from "firebase/auth";
 import { motion } from "framer-motion";
-import { registerSW } from "virtual:pwa-register";
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { setupIonicReact } from "@ionic/react";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -97,24 +96,6 @@ function App() {
   // }, []);
 
   // console.log("introSeen: ", introSeen);
-
-  const [showUpdate] = useIonAlert();
-  const updateSW = registerSW({
-    onNeedRefresh() {
-      showUpdate({
-        header: "New version available",
-        message: "Please update the app to continue",
-        buttons: [
-          {
-            text: "Update",
-            handler: async () => {
-              await updateSW(true);
-            },
-          },
-        ],
-      });
-    },
-  });
 
   // if (!introSeen || introSeen === null) {
   //   return (

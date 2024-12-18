@@ -13,6 +13,7 @@ import { Capacitor } from "@capacitor/core";
 import { Providers } from "./Providers";
 import { createRoot } from "react-dom/client";
 import { initializeApp } from "firebase/app";
+import { isPlatform } from "@ionic/react";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDpRsaLBzTnR1hN1YCkePRqI6BpVdq_NQw",
@@ -42,6 +43,19 @@ if (Capacitor.isNativePlatform()) {
   })
 } else {
   getAuth(app);
+}
+
+// Check if the app is running in a native Capacitor environment
+const isNative = isPlatform("capacitor");
+
+// register service worker if we're not capacitor
+if (!isNative) {
+  // Register the service worker only for web deployments
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch((error) => {
+      console.error('Service Worker registration failed:', error);
+    });
+  }
 }
 
 const container = document.getElementById("root");
