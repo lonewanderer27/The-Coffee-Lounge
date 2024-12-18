@@ -87,16 +87,16 @@ export const INTRO_KEY = "seen-intro";
 function App() {
   const [introSeen, setIntroSeen] = useState<boolean | null>(null);
 
-  useEffect(() => {
-    const checkStorage = async () => {
-      const seen = await Preferences.get({ key: INTRO_KEY });
-      console.log("seen: ", seen);
-      setIntroSeen(seen.value === "true");
-    };
-    checkStorage();
-  }, []);
+  // useEffect(() => {
+  //   const checkStorage = async () => {
+  //     const seen = await Preferences.get({ key: INTRO_KEY });
+  //     console.log("seen: ", seen);
+  //     setIntroSeen(seen.value === "true");
+  //   };
+  //   checkStorage();
+  // }, []);
 
-  console.log("introSeen: ", introSeen);
+  // console.log("introSeen: ", introSeen);
 
   const [showUpdate] = useIonAlert();
   const updateSW = registerSW({
@@ -116,190 +116,190 @@ function App() {
     },
   });
 
-  if (!introSeen || introSeen === null) {
-    return (
-      <Suspense>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.5 }}
-        >
-          <Intro setIntro={setIntroSeen} />
-        </motion.div>
-      </Suspense>
-    );
-  } else {
-    return (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-      >
-        <IonApp>
-          <IonReactRouter>
-            <IonTabs>
-              <AppUrlListener></AppUrlListener>
-              <IonRouterOutlet>
-                <Route exact path="/virtualVisit/index.html" />
-                <AuthWrapper>
-                  <Route exact path="/account">
-                    <Suspense>
-                      <Account setIntro={setIntroSeen} />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/account/accountandsecurity">
-                    <Suspense>
-                      <ProfileAndSecurity />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/account/bankaccountscards">
-                    <Suspense>
-                      <MyCards />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/account/cards/:card_id">
-                    <Suspense>
-                      <Card />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/account/changepass">
-                    <Suspense>
-                      <ChangePassword />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/checkout/">
-                    <Suspense>
-                      <Checkout />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/checkout/choose-payoption">
-                    <Suspense>
-                      <PaymentMethods />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/account/delivery-addresses">
-                    <Suspense>
-                      <DeliveryAddresses />
-                    </Suspense>
-                  </Route>
-                  <Route
-                    exact
-                    path="/account/delivery-addresses/edit/:address_id"
-                  >
-                    <Suspense>
-                      <EditDeliveryAddress />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/account/delivery-addresses/choose">
-                    <Suspense>
-                      <DeliveryAddresses choose={true} />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/orders">
-                    <Suspense>
-                      <Orders />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/orders/:order_id">
-                    <Suspense>
-                      <Order />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/my-favorites">
-                    <Suspense>
-                      <MyFavorites />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/orders/:order_id/payment-success">
-                    <Suspense>
-                      <PaymentSuccess />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/orders/:order_id/receipt">
-                    <Suspense>
-                      <Receipt />
-                    </Suspense>
-                  </Route>
-                  <Route exact path="/onboarding">
-                    <Onboarding />
-                  </Route>
-                </AuthWrapper>
-                <Route exact path="/home">
-                  <Home />
-                </Route>
-                <Route exact path="/virtualVisit">
+  // if (!introSeen || introSeen === null) {
+  //   return (
+  //     <Suspense>
+  //       <motion.div
+  //         initial={{ opacity: 0 }}
+  //         animate={{ opacity: 1 }}
+  //         transition={{ duration: 1, delay: 0.5 }}
+  //       >
+  //         <Intro setIntro={setIntroSeen} />
+  //       </motion.div>
+  //     </Suspense>
+  //   );
+  // }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.5 }}
+    >
+      <IonApp>
+        <IonReactRouter>
+          <IonTabs>
+            <AppUrlListener></AppUrlListener>
+            <IonRouterOutlet>
+              <Route exact path="/virtualVisit/index.html" />
+              <AuthWrapper>
+                <Route exact path="/account">
                   <Suspense>
-                    <VirtualVisit />
+                    <Account setIntro={setIntroSeen} />
                   </Suspense>
                 </Route>
-                <Route exact path="/explore">
+                <Route exact path="/account/accountandsecurity">
                   <Suspense>
-                    <Explore />
+                    <ProfileAndSecurity />
                   </Suspense>
                 </Route>
-                <Route exact path="/cart">
+                <Route exact path="/account/bankaccountscards">
                   <Suspense>
-                    <Cart />
+                    <MyCards />
                   </Suspense>
                 </Route>
-                <Route exact path="/">
-                  <Redirect to="/home" />
-                </Route>
-                <Route exact path="/register">
+                <Route exact path="/account/cards/:card_id">
                   <Suspense>
-                    <Register />
+                    <Card />
                   </Suspense>
                 </Route>
-                <Route exact path="/login">
-                  <Login />
-                </Route>
-                <Route path="/signin/">
-                  <SignIn />
-                </Route>
-                <Route exact path="/category">
+                <Route exact path="/account/changepass">
                   <Suspense>
-                    <CategoryPage />
+                    <ChangePassword />
                   </Suspense>
                 </Route>
-                <Route exact path="/product/:product_id">
+                <Route exact path="/checkout/">
                   <Suspense>
-                    <ProductPage />
+                    <Checkout />
                   </Suspense>
                 </Route>
-                <Route exact path="/about">
+                <Route exact path="/checkout/choose-payoption">
                   <Suspense>
-                    <About />
+                    <PaymentMethods />
                   </Suspense>
                 </Route>
-              </IonRouterOutlet>
-              <IonTabBar slot="bottom">
-                <IonTabButton tab="home" href="/home">
-                  <IonIcon aria-hidden="true" icon={homeOutline} />
-                  {/* <IonLabel>Home</IonLabel> */}
-                </IonTabButton>
-                <IonTabButton tab="explore" href="/explore">
-                  <IonIcon aria-hidden="true" icon={starOutline} />
-                  {/* <IonLabel>Explore</IonLabel> */}
-                </IonTabButton>
-                <IonTabButton tab="cart" href="/cart">
-                  <IonIcon aria-hidden="true" icon={bagOutline} />
-                  {/* <IonLabel>Cart</IonLabel> */}
-                </IonTabButton>
-                <IonTabButton tab="order" href="/orders">
-                  <IonIcon aria-hidden="true" icon={receiptOutline} />
-                  {/* <IonLabel>Orders</IonLabel> */}
-                </IonTabButton>
-                <IonTabButton tab="account" href="/account">
-                  <IonIcon aria-hidden="true" icon={personCircleOutline} />
-                  {/* <IonLabel>Account</IonLabel> */}
-                </IonTabButton>
-              </IonTabBar>
-            </IonTabs>
-          </IonReactRouter>
-        </IonApp>
-      </motion.div>
-    );
-  }
+                <Route exact path="/account/delivery-addresses">
+                  <Suspense>
+                    <DeliveryAddresses />
+                  </Suspense>
+                </Route>
+                <Route
+                  exact
+                  path="/account/delivery-addresses/edit/:address_id"
+                >
+                  <Suspense>
+                    <EditDeliveryAddress />
+                  </Suspense>
+                </Route>
+                <Route exact path="/account/delivery-addresses/choose">
+                  <Suspense>
+                    <DeliveryAddresses choose={true} />
+                  </Suspense>
+                </Route>
+                <Route exact path="/orders">
+                  <Suspense>
+                    <Orders />
+                  </Suspense>
+                </Route>
+                <Route exact path="/orders/:order_id">
+                  <Suspense>
+                    <Order />
+                  </Suspense>
+                </Route>
+                <Route exact path="/my-favorites">
+                  <Suspense>
+                    <MyFavorites />
+                  </Suspense>
+                </Route>
+                <Route exact path="/orders/:order_id/payment-success">
+                  <Suspense>
+                    <PaymentSuccess />
+                  </Suspense>
+                </Route>
+                <Route exact path="/orders/:order_id/receipt">
+                  <Suspense>
+                    <Receipt />
+                  </Suspense>
+                </Route>
+                <Route exact path="/onboarding">
+                  <Onboarding />
+                </Route>
+              </AuthWrapper>
+              <Route exact path="/home">
+                <Home />
+              </Route>
+              <Route exact path="/virtualVisit">
+                <Suspense>
+                  <VirtualVisit />
+                </Suspense>
+              </Route>
+              <Route exact path="/explore">
+                <Suspense>
+                  <Explore />
+                </Suspense>
+              </Route>
+              <Route exact path="/cart">
+                <Suspense>
+                  <Cart />
+                </Suspense>
+              </Route>
+              <Route exact path="/">
+                <Redirect to="/home" />
+              </Route>
+              <Route exact path="/register">
+                <Suspense>
+                  <Register />
+                </Suspense>
+              </Route>
+              <Route exact path="/login">
+                <Login />
+              </Route>
+              <Route path="/signin/">
+                <SignIn />
+              </Route>
+              <Route exact path="/category">
+                <Suspense>
+                  <CategoryPage />
+                </Suspense>
+              </Route>
+              <Route exact path="/product/:product_id">
+                <Suspense>
+                  <ProductPage />
+                </Suspense>
+              </Route>
+              <Route exact path="/about">
+                <Suspense>
+                  <About />
+                </Suspense>
+              </Route>
+            </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="home" href="/home">
+                <IonIcon aria-hidden="true" icon={homeOutline} />
+                {/* <IonLabel>Home</IonLabel> */}
+              </IonTabButton>
+              <IonTabButton tab="explore" href="/explore">
+                <IonIcon aria-hidden="true" icon={starOutline} />
+                {/* <IonLabel>Explore</IonLabel> */}
+              </IonTabButton>
+              <IonTabButton tab="cart" href="/cart">
+                <IonIcon aria-hidden="true" icon={bagOutline} />
+                {/* <IonLabel>Cart</IonLabel> */}
+              </IonTabButton>
+              <IonTabButton tab="order" href="/orders">
+                <IonIcon aria-hidden="true" icon={receiptOutline} />
+                {/* <IonLabel>Orders</IonLabel> */}
+              </IonTabButton>
+              <IonTabButton tab="account" href="/account">
+                <IonIcon aria-hidden="true" icon={personCircleOutline} />
+                {/* <IonLabel>Account</IonLabel> */}
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+      </IonApp>
+    </motion.div>
+  )
 }
 
 export const AuthWrapper = ({
