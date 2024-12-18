@@ -280,17 +280,17 @@ const Chooser = memo((props: { handleGoogle: () => void }) => {
         <IonLabel className="text-center">Send Magic Link</IonLabel>
         <IonIcon slot="start" src={mail} />
       </IonButton>
-      <IonButton
+      {/* <IonButton
         className="mt-2"
         onClick={() => props.handleGoogle()}
         shape="round"
       >
         <IonLabel className="text-center">Continue with Google</IonLabel>
         <IonIcon slot="start" src={logoGoogle} />
-      </IonButton>
+      </IonButton> */}
 
       <div className="inline-flex items-center justify-center w-full">
-        <hr className="w-64 h-px mt-14 mb-10 bg-gray-200 border-0 dark:bg-gray-700"></hr>
+        <hr className="w-64 h-px mt-10 mb-10 bg-gray-200 border-0 dark:bg-gray-700"></hr>
         <span className="absolute px-3 font-medium text-gray-900 -translate-x-1/2 bg-white  dark:text-white dark:bg-gray-900">
           OR
         </span>
